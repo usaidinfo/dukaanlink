@@ -1,5 +1,56 @@
-.order-date-filter {
-  margin: 0 0 0.85rem;
+.order-date-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 34px;
+  padding: 0.3rem 0.65rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--surface-low, #f0f3ff);
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.order-date-trigger-count {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.order-date-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(17, 28, 45, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.order-date-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: min(88vh, 640px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  padding: 0.85rem 1rem 1.25rem;
+  box-shadow: 0 -12px 40px rgba(17, 28, 45, 0.18);
+}
+
+.order-date-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.order-date-sheet-head strong {
+  font-size: 1rem;
+  font-weight: 800;
 }
 
 .order-date-chips {
@@ -7,6 +58,7 @@
   gap: 0.4rem;
   overflow-x: auto;
   padding-bottom: 0.15rem;
+  margin-bottom: 0.75rem;
   scrollbar-width: none;
 }
 
@@ -27,6 +79,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  cursor: pointer;
 }
 
 .order-date-chip.active {
@@ -35,24 +88,24 @@
   color: var(--primary);
 }
 
-.order-date-picker {
-  margin-top: 0.65rem;
-  padding: 0.75rem 0.85rem;
-  border-radius: 14px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-}
-
-.order-date-picker label {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-size: 0.8rem;
+.order-date-calendar-hint {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: #334155;
+  color: #64748b;
 }
 
-.order-date-picker input[type="date"] {
-  min-height: 44px;
+.order-date-calendar .rdp-root {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: #eef8f6;
+  margin: 0 auto;
   font-size: 0.9rem;
 }
 
+.order-date-calendar .rdp-month_caption {
+  font-weight: 800;
+}
+
+.order-date-calendar .rdp-day_button {
+  border-radius: 10px;
+}

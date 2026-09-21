@@ -8,7 +8,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { LanguageToggle, useI18n } from "../../components/i18n-provider";
 import { getBusinessCopy } from "../../lib/business-config";
 import OrderAlerts from "../../components/dashboard/order-alerts";
-import { Boxes, LogOut, QrCode, ReceiptText, Store } from "lucide-react";
+import { Boxes, LogOut, QrCode, ScrollText, Store } from "lucide-react";
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
@@ -74,7 +74,7 @@ export default function DashboardLayout({ children }) {
   }
 
   const nav = [
-    { href: "/dashboard/orders", label: businessCopy.orderListTitle, icon: ReceiptText, badge: newOrders },
+    { href: "/dashboard/orders", label: businessCopy.orderListTitle, icon: ScrollText, badge: newOrders },
     { href: "/dashboard/menu", label: businessCopy.collectionName, icon: Boxes },
     { href: "/dashboard", label: t("nav.qr"), icon: QrCode },
   ];

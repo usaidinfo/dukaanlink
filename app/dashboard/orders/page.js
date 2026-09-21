@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AppSkeleton } from "../../../components/skeleton-screen";
 import { supabase } from "../../../lib/supabaseClient";
-import { BellRing, CheckCircle2, Flag, ReceiptText, Share2, XCircle } from "lucide-react";
+import { BellRing, CheckCircle2, Flag, Flame, IndianRupee, ScrollText, Share2, Volume2, VolumeX, XCircle } from "lucide-react";
 import { getBusinessCopy } from "../../../lib/business-config";
 import { useI18n } from "../../../components/i18n-provider";
 import OrderQuickReplies from "../../../components/dashboard/order-quick-replies";
@@ -29,7 +29,6 @@ import {
   requestBrowserNotifications,
   setOrderSoundEnabled,
 } from "../../../lib/order-alerts";
-import "../../../components/dashboard/order-alerts.css";
 import "./orders.css";
 
 export default function OrdersPage() {
@@ -50,6 +49,7 @@ export default function OrdersPage() {
   const [flagNote, setFlagNote] = useState("");
   const [flagging, setFlagging] = useState(false);
   const [flagError, setFlagError] = useState("");
+  const [statusTab, setStatusTab] = useState("active");
 
   useEffect(() => {
     setSoundOn(isOrderSoundEnabled());
@@ -246,6 +246,24 @@ export default function OrdersPage() {
     () => summarizeOrders(filterOrdersByRange(orders, "today")),
     [orders]
   );
+  const tabCounts = useMemo(() => {
+    let active = 0;
+    let completed = 0;
+    for (const order of rangedOrders) {
+      if (isActiveOrderStatus(order.status)) active += 1;
+      else if (order.status === "done") completed += 1;
+    }
+    return { active, completed, all: rangedOrders.length };
+  }, [rangedOrders]);
+  const visibleOrders = useMemo(() => {
+    if (statusTab === "active") {
+      return rangedOrders.filter((o) => isActiveOrderStatus(o.status));
+    }
+    if (statusTab === "completed") {
+      return rangedOrders.filter((o) => o.status === "done");
+    }
+    return rangedOrders;
+  }, [rangedOrders, statusTab]);
 
   function shareTodaySummary() {
     const dateLabel = new Date().toLocaleDateString(locale === "hi" ? "hi-IN" : "en-IN", {
@@ -280,116 +298,112 @@ export default function OrdersPage() {
     );
   }
 
-  const activeInRange = rangedOrders.filter((o) => isActiveOrderStatus(o.status)).length;
+  const activeInRange = tabCounts.active;
   const businessCopy = getBusinessCopy(businessCategory, locale);
-
-  let chimeStatus = t("orders.chimeActive");
-  let chimeStatusClass = "chime-status";
-  if (notifyPerm === "denied") {
-    chimeStatus = t("orders.notifyBlocked");
-    chimeStatusClass = "chime-status warn";
-  } else if (notifyPerm === "unsupported") {
-    chimeStatus = t("orders.notifyUnsupported");
-    chimeStatusClass = "chime-status off";
-  } else if (notifyPerm !== "granted") {
-    chimeStatus = t("orders.notifyOff");
-    chimeStatusClass = "chime-status warn";
-  } else if (!soundOn) {
-    chimeStatus = t("orders.soundOff");
-    chimeStatusClass = "chime-status off";
-  }
+  const needBrowserAlerts =
+    notifyPerm !== "granted" && notifyPerm !== "unsupported" && notifyPerm !== "denied";
 
   return (
-    <div className="page">
-      <div className="surface-strip">
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", minWidth: 0 }}>
-          <ReceiptText size={20} strokeWidth={2.1} color="var(--primary)" />
-          <div style={{ minWidth: 0 }}>
-            <strong>{businessCopy.orderListTitle}</strong>
-            <p className="muted orders-strip-sub">
-              {summary.count} {t("orders.summaryInRange")}
-            </p>
-          </div>
+    <div className="page orders-page">
+      <div className="orders-toolbar">
+        <div className={`orders-live-pill ${activeInRange > 0 ? "hot" : ""}`}>
+          <span className="orders-live-dot" />
+          {activeInRange} {t("orders.active")}
         </div>
-        {activeInRange > 0 ? (
-          <span className="count-pill">
-            {activeInRange} {t("orders.active")}
-          </span>
-        ) : null}
+        <div className="orders-toolbar-right">
+          <button
+            type="button"
+            className={`orders-sound-pill ${soundOn ? "on" : "off"}`}
+            onClick={toggleSound}
+            title={t("orders.chimeTitle")}
+          >
+            {soundOn ? <Volume2 size={15} strokeWidth={2.2} /> : <VolumeX size={15} strokeWidth={2.2} />}
+            <span>{soundOn ? t("orders.soundOnShort") : t("orders.soundOffShort")}</span>
+          </button>
+          {needBrowserAlerts ? (
+            <button type="button" className="orders-alert-link" onClick={enableBrowserAlerts}>
+              <BellRing size={14} strokeWidth={2.2} />
+              {t("orders.enableAlertsShort")}
+            </button>
+          ) : null}
+        </div>
       </div>
 
-      <OrderDateFilter
-        preset={rangePreset}
-        customDate={customDate}
-        onChange={({ preset, customDate: nextDate }) => {
-          setRangePreset(preset);
-          if (nextDate) setCustomDate(nextDate);
-        }}
-      />
-
-      <div className="orders-summary">
-        <div className="orders-summary-card">
-          <span>{t("orders.summaryOrders")}</span>
-          <strong>{summary.count}</strong>
+      <div className="orders-glance">
+        <div className="orders-glance-top">
+          <OrderDateFilter
+            preset={rangePreset}
+            customDate={customDate}
+            rangeCount={summary.count}
+            onChange={({ preset, customDate: nextDate }) => {
+              setRangePreset(preset);
+              if (nextDate) setCustomDate(nextDate);
+            }}
+          />
+          <button type="button" className="orders-share-mini" onClick={shareTodaySummary}>
+            <Share2 size={15} strokeWidth={2.2} />
+            {t("orders.shareShort")}
+          </button>
         </div>
-        <div className="orders-summary-card">
-          <span>{t("orders.summarySales")}</span>
-          <strong>₹{summary.totalSales}</strong>
-        </div>
-        <div className="orders-summary-card wide">
-          <span>{t("orders.summaryBest")}</span>
-          <strong className="muted-strong">
-            {summary.bestItem
-              ? `${summary.bestItem.name} · ${summary.bestItem.qty}`
-              : t("orders.summaryBestEmpty")}
-          </strong>
-        </div>
-        <button
-          type="button"
-          className="orders-share-summary"
-          onClick={shareTodaySummary}
-        >
-          <Share2 size={16} strokeWidth={2.2} />
-          {t("orders.shareTodaySummary")}
-        </button>
-      </div>
-
-      <div className="chime-card">
-        <div className="chime-left">
-          <div className="chime-icon">
-            <BellRing size={20} strokeWidth={2.1} />
+        <div className="orders-glance-metrics">
+          <div className="orders-metric">
+            <ScrollText size={16} strokeWidth={2.1} />
+            <div>
+              <strong>{summary.count}</strong>
+              <span>{t("orders.summaryOrders")}</span>
+            </div>
           </div>
-          <div>
-            <div style={{ fontWeight: 700 }}>{t("orders.chimeTitle")}</div>
-            <div className="muted" style={{ marginTop: "0.15rem", fontSize: "0.82rem" }}>
-              {t("orders.chimeText")}
+          <div className="orders-metric-divider" />
+          <div className="orders-metric">
+            <IndianRupee size={16} strokeWidth={2.1} />
+            <div>
+              <strong>₹{summary.totalSales}</strong>
+              <span>{t("orders.summarySales")}</span>
+            </div>
+          </div>
+          <div className="orders-metric-divider" />
+          <div className="orders-metric best">
+            <Flame size={16} strokeWidth={2.1} />
+            <div>
+              <strong className="truncate">
+                {summary.bestItem
+                  ? `${summary.bestItem.name} (${summary.bestItem.qty})`
+                  : "—"}
+              </strong>
+              <span>{t("orders.summaryBest")}</span>
             </div>
           </div>
         </div>
-        <div className={chimeStatusClass}>{chimeStatus}</div>
-        <div className="chime-actions" style={{ width: "100%" }}>
-          <button type="button" className="ghost-cta" onClick={toggleSound}>
-            {soundOn ? t("orders.soundDisable") : t("orders.soundEnable")}
+      </div>
+
+      <div className="orders-status-tabs" role="tablist" aria-label={businessCopy.orderListTitle}>
+        {[
+          { id: "active", label: t("orders.statusActive"), count: tabCounts.active },
+          { id: "completed", label: t("orders.statusCompleted"), count: tabCounts.completed },
+          { id: "all", label: t("orders.statusAll"), count: tabCounts.all },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={statusTab === tab.id}
+            className={`orders-status-tab ${statusTab === tab.id ? "active" : ""}`}
+            onClick={() => setStatusTab(tab.id)}
+          >
+            {tab.label}
+            <i>{tab.count}</i>
           </button>
-          {notifyPerm !== "granted" && notifyPerm !== "unsupported" && notifyPerm !== "denied" ? (
-            <button type="button" className="secondary-cta" onClick={enableBrowserAlerts}>
-              {t("orders.enableBrowserAlerts")}
-            </button>
-          ) : null}
-          {notifyPerm === "denied" ? (
-            <p className="muted" style={{ fontSize: "0.75rem", width: "100%", margin: 0 }}>
-              {t("orders.notifyBlockedHint")}
-            </p>
-          ) : null}
-        </div>
+        ))}
       </div>
 
       {orders.length === 0 ? (
         <p className="empty-state">{t("orders.noOrders")}</p>
       ) : rangedOrders.length === 0 ? (
         <p className="empty-state">{t("orders.noOrdersInRange")}</p>
+      ) : visibleOrders.length === 0 ? (
+        <p className="empty-state">{t("orders.noOrdersInTab")}</p>
       ) : (
-        rangedOrders.map((order) => {
+        visibleOrders.map((order) => {
           const status = order.status || "received";
           const done = status === "done";
           const cancelled = status === "cancelled";
