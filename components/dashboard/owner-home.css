@@ -1,0 +1,115 @@
+.qr-standee-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.qr-standee-actions .inline-link-btn {
+  white-space: nowrap;
+}
+
+.qr-standee-actions .inline-link-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.owner-home .qr-standee-head {
+  flex-wrap: wrap;
+}
+
+.closed-today-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  width: 100%;
+  margin: 0 0 0.95rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.closed-today-toggle:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.closed-today-toggle.on {
+  border-color: #fdba74;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  box-shadow: 0 8px 22px rgba(180, 83, 9, 0.12);
+}
+
+.closed-today-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.closed-today-copy strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.closed-today-toggle.on .closed-today-copy strong {
+  color: #9a3412;
+}
+
+.closed-today-copy span {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.closed-today-toggle.on .closed-today-copy span {
+  color: #c2410c;
+}
+
+.closed-today-switch {
+  flex-shrink: 0;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  padding: 3px;
+  transition: background 0.15s ease;
+}
+
+.closed-today-toggle.on .closed-today-switch {
+  background: #ea580c;
+}
+
+.closed-today-switch i {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.2);
+  transition: transform 0.15s ease;
+}
+
+.closed-today-toggle.on .closed-today-switch i {
+  transform: translateX(20px);
+}
+
+.status-chip.closed-today {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.status-chip.closed-today .pulse {
+  background: #ea580c;
+  box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.45);
+}

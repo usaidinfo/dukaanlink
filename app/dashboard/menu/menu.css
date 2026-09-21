@@ -1,0 +1,39 @@
+/* Menu page styles — keep new catalog UI here, not in globals.css */
+
+.menu-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.menu-card-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  margin-top: 0.15rem;
+}
+
+.menu-card-links .tiny-link {
+  font-size: 0.75rem;
+}
+
+.confirm-icon.theme {
+  background: var(--primary-tint);
+  color: var(--primary);
+  border: 1px solid rgba(0, 104, 93, 0.22);
+}
+
+.confirm-actions .primary-cta {
+  min-height: 48px;
+  width: 100%;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  gap: 0.4rem;
+}
+
+.confirm-actions .primary-cta:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

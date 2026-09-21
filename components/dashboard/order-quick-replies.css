@@ -1,0 +1,67 @@
+.order-replies {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eef2f7;
+}
+
+.order-replies-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.55rem;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.order-replies-number p {
+  margin: 0 0 0.45rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.order-replies-number-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.order-replies-number-row input {
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.88rem;
+}
+
+.order-replies-number-row .secondary-cta {
+  min-height: 42px;
+  width: auto;
+  padding-inline: 0.85rem;
+  font-size: 0.8rem;
+}
+
+.order-reply-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.order-reply-chip {
+  min-height: 34px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 104, 93, 0.28);
+  background: #eef8f6;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.order-reply-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+

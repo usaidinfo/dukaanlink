@@ -1,0 +1,58 @@
+.order-date-filter {
+  margin: 0 0 0.85rem;
+}
+
+.order-date-chips {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.15rem;
+  scrollbar-width: none;
+}
+
+.order-date-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.order-date-chip {
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.order-date-chip.active {
+  border-color: rgba(0, 104, 93, 0.4);
+  background: #eef8f6;
+  color: var(--primary);
+}
+
+.order-date-picker {
+  margin-top: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.order-date-picker label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.order-date-picker input[type="date"] {
+  min-height: 44px;
+  font-size: 0.9rem;
+}
+

@@ -1,0 +1,114 @@
+.order-toast {
+  position: fixed;
+  top: calc(4.25rem + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  width: min(calc(100% - 1.5rem), 400px);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem 0.75rem;
+  border-radius: 16px;
+  background: #0f172a;
+  color: #fff;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.28);
+  animation: order-toast-in 0.22s ease-out;
+}
+
+@keyframes order-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.order-toast-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 104, 93, 0.95);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.order-toast-copy {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  color: inherit;
+}
+
+.order-toast-copy strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.order-toast-copy span {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.order-toast-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.chime-card {
+  cursor: default;
+}
+
+.chime-card.interactive {
+  cursor: pointer;
+}
+
+.chime-status {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-align: right;
+  line-height: 1.25;
+  max-width: 7.5rem;
+}
+
+.chime-status.warn {
+  color: #b45309;
+}
+
+.chime-status.off {
+  color: var(--muted);
+}
+
+.chime-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.chime-actions .secondary-cta,
+.chime-actions .ghost-cta {
+  min-height: 40px;
+  width: auto;
+  flex: 1;
+  font-size: 0.8rem;
+  padding-inline: 0.75rem;
+}

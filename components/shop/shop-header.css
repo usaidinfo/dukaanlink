@@ -1,0 +1,9 @@
+.shop-open-pill.closed {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.shop-open-pill.closed .shop-open-dot {
+  background: #94a3b8;
+  box-shadow: none;
+}

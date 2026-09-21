@@ -1,0 +1,20 @@
+.shop-field-hint {
+  margin: 0.4rem 0 0;
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.shop-field-error {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+}
+
+.shop-note-card.has-error {
+  border-color: rgba(186, 26, 26, 0.35);
+  box-shadow: 0 0 0 1px rgba(186, 26, 26, 0.12);
+}
+
+.shop-note-card.has-error input {
+  border-color: rgba(186, 26, 26, 0.45);
+}
