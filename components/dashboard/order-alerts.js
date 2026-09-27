@@ -2,13 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BellRing, X } from "lucide-react";
+import { BellRing, TriangleAlert, X } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import {
   formatOrderNotifyBody,
   playOrderChime,
   showBrowserOrderNotification,
 } from "../../lib/order-alerts";
+import { crossedLowStockThreshold } from "../../lib/stock-alerts";
+import { unitLabel } from "../../lib/quantity-units";
 import { useI18n } from "../i18n-provider";
 import "./order-alerts.css";
 
@@ -19,15 +21,18 @@ export default function OrderAlerts({ onBadgeChange }) {
   const [toast, setToast] = useState(null);
   const businessIdRef = useRef(null);
   const seenIdsRef = useRef(new Set());
+  const stockMapRef = useRef(new Map());
   const toastTimerRef = useRef(null);
   const onBadgeChangeRef = useRef(onBadgeChange);
   const tRef = useRef(t);
+  const handleLowStockRef = useRef(null);
 
   onBadgeChangeRef.current = onBadgeChange;
   tRef.current = t;
 
   useEffect(() => {
     let channel = null;
+    let stockChannel = null;
     let cancelled = false;
     const mountId = Math.random().toString(36).slice(2, 9);
 
@@ -44,6 +49,18 @@ export default function OrderAlerts({ onBadgeChange }) {
 
         if (!business?.id || cancelled) return;
         businessIdRef.current = business.id;
+
+        try {
+          const { data: menuRows, error: menuError } = await supabase
+            .from("menu_items")
+            .select("id, name, quantity, quantity_unit, alert_below, stock_tracking_enabled")
+            .eq("business_id", business.id);
+          if (!menuError) {
+            (menuRows || []).forEach((row) => stockMapRef.current.set(row.id, row));
+          }
+        } catch {
+          // older schemas without stock columns
+        }
 
         const { data: recent } = await supabase
           .from("orders")
@@ -66,6 +83,39 @@ export default function OrderAlerts({ onBadgeChange }) {
           }
         }
 
+        function formatLowStockBody(item) {
+          return String(tRef.current("menu.lowStockAlert") || "")
+            .replace("{name}", item.name || "Item")
+            .replace("{qty}", String(item.quantity ?? 0))
+            .replace("{unit}", unitLabel(item.quantity_unit));
+        }
+
+        function handleLowStock(item) {
+          if (!item?.id) return;
+          playOrderChime();
+          if (typeof navigator !== "undefined" && navigator.vibrate) {
+            navigator.vibrate([120, 60, 120]);
+          }
+          const body = formatLowStockBody(item);
+          setToast({
+            id: `stock-${item.id}-${item.quantity}`,
+            title: tRef.current("orders.lowStockTitle"),
+            body,
+            href: "/dashboard/menu",
+            kind: "stock",
+          });
+          if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
+          toastTimerRef.current = window.setTimeout(() => setToast(null), 6500);
+          showBrowserOrderNotification({
+            title: tRef.current("orders.lowStockTitle"),
+            body,
+            orderId: `stock-${item.id}`,
+            url: "/dashboard/menu",
+          });
+        }
+
+        handleLowStockRef.current = handleLowStock;
+
         function handleNewOrder(order) {
           if (!order?.id || seenIdsRef.current.has(order.id)) return;
           seenIdsRef.current.add(order.id);
@@ -81,6 +131,7 @@ export default function OrderAlerts({ onBadgeChange }) {
             title: tRef.current("orders.alertTitle"),
             body,
             total: order.total,
+            href: "/dashboard/orders",
           });
           if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
           toastTimerRef.current = window.setTimeout(() => setToast(null), 6500);
@@ -143,6 +194,33 @@ export default function OrderAlerts({ onBadgeChange }) {
           }
         });
 
+        const stockTopic = `owner-stock-${business.id}-${mountId}`;
+        const stockNext = supabase.channel(stockTopic);
+        stockNext.on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "menu_items",
+            filter: `business_id=eq.${business.id}`,
+          },
+          (payload) => {
+            const nextRow = payload.new;
+            if (!nextRow?.id) return;
+            const prev = stockMapRef.current.get(nextRow.id);
+            if (crossedLowStockThreshold(prev, nextRow)) {
+              handleLowStock(nextRow);
+            }
+            stockMapRef.current.set(nextRow.id, nextRow);
+          }
+        );
+        stockChannel = stockNext;
+        stockNext.subscribe((status) => {
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+            console.warn("Stock alerts realtime:", status);
+          }
+        });
+
         await refreshBadge();
       } catch (err) {
         // Soft failure — dashboard works without live chimes
@@ -158,7 +236,28 @@ export default function OrderAlerts({ onBadgeChange }) {
       if (channel) {
         supabase.removeChannel(channel).catch(() => {});
       }
+      if (stockChannel) {
+        supabase.removeChannel(stockChannel).catch(() => {});
+      }
     };
+  }, []);
+
+  useEffect(() => {
+    function onLowStock(event) {
+      const item = event.detail;
+      if (!item?.id) return;
+      if (businessIdRef.current && item.business_id && item.business_id !== businessIdRef.current) {
+        return;
+      }
+      const prev = stockMapRef.current.get(item.id);
+      if (crossedLowStockThreshold(prev, item)) {
+        handleLowStockRef.current?.(item);
+      }
+      stockMapRef.current.set(item.id, item);
+    }
+
+    window.addEventListener("dukaanlink-low-stock", onLowStock);
+    return () => window.removeEventListener("dukaanlink-low-stock", onLowStock);
   }, []);
 
   // Unlock audio on first user tap (mobile browsers block autoplay until then)
@@ -182,19 +281,23 @@ export default function OrderAlerts({ onBadgeChange }) {
 
   return (
     <div className="order-toast" role="status" aria-live="polite">
-      <div className="order-toast-icon">
-        <BellRing size={18} strokeWidth={2.2} />
+      <div className={`order-toast-icon ${toast.kind === "stock" ? "warn" : ""}`}>
+        {toast.kind === "stock" ? (
+          <TriangleAlert size={18} strokeWidth={2.2} />
+        ) : (
+          <BellRing size={18} strokeWidth={2.2} />
+        )}
       </div>
       <button
         type="button"
         className="order-toast-copy"
         onClick={() => {
           setToast(null);
-          router.push("/dashboard/orders");
+          router.push(toast.href || "/dashboard/orders");
         }}
       >
         <strong>{toast.title}</strong>
-        <span>{toast.body}</span>
+        <span className={toast.kind === "stock" ? "wrap" : undefined}>{toast.body}</span>
       </button>
       <button
         type="button"

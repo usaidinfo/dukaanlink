@@ -13,6 +13,7 @@ export default function ShopCheckoutExtras({
   customerName,
   setCustomerName,
   whatsappError,
+  requireCustomerWhatsapp = false,
 }) {
   const { t } = useI18n();
 
@@ -22,6 +23,7 @@ export default function ShopCheckoutExtras({
         <label htmlFor="customer-name">
           <User size={17} strokeWidth={2.1} />
           <span>{t("shop.customerName")}</span>
+          <span className="shop-field-chip optional">{t("common.optional")}</span>
         </label>
         <input
           id="customer-name"
@@ -39,6 +41,9 @@ export default function ShopCheckoutExtras({
         <label htmlFor="customer-whatsapp">
           <Phone size={17} strokeWidth={2.1} />
           <span>{t("shop.customerWhatsapp")}</span>
+          <span className={`shop-field-chip ${requireCustomerWhatsapp ? "required" : "optional"}`}>
+            {requireCustomerWhatsapp ? t("common.required") : t("common.optional")}
+          </span>
         </label>
         <input
           id="customer-whatsapp"
@@ -49,12 +54,16 @@ export default function ShopCheckoutExtras({
           onChange={(e) => setCustomerWhatsapp(e.target.value)}
           placeholder={t("shop.customerWhatsappPlaceholder")}
           aria-invalid={Boolean(whatsappError)}
-          required
+          required={requireCustomerWhatsapp}
         />
         {whatsappError ? (
           <p className="error-text shop-field-error">{whatsappError}</p>
         ) : (
-          <p className="shop-field-hint">{t("shop.customerWhatsappHint")}</p>
+          <p className="shop-field-hint">
+            {requireCustomerWhatsapp
+              ? t("shop.customerWhatsappHint")
+              : t("shop.customerWhatsappHintOptional")}
+          </p>
         )}
       </section>
 
@@ -62,6 +71,7 @@ export default function ShopCheckoutExtras({
         <label htmlFor="order-note">
           <NotebookPen size={17} strokeWidth={2.1} />
           <span>{t("shop.specialNote")}</span>
+          <span className="shop-field-chip optional">{t("common.optional")}</span>
         </label>
         <input
           id="order-note"

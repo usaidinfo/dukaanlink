@@ -1,3 +1,28 @@
+.shop-note-card label {
+  justify-content: flex-start;
+}
+
+.shop-field-chip {
+  margin-left: auto;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.shop-field-chip.optional {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.shop-field-chip.required {
+  background: #eef8f6;
+  color: var(--primary);
+}
+
 .shop-field-hint {
   margin: 0.4rem 0 0;
   color: #64748b;

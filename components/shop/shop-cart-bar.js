@@ -1,6 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { formatMoney } from "../../lib/gst";
 import { useI18n } from "../i18n-provider";
+import "./shop-cart-bar.css";
 
 function WhatsAppIcon() {
   return (
@@ -13,27 +17,70 @@ function WhatsAppIcon() {
 export default function ShopCartBar({
   cartCount,
   total,
+  breakdown,
   ordering,
   ctaLabel,
   onPlaceOrder,
+  onExpandedChange,
 }) {
   const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const hasGst = Boolean(breakdown?.hasGst);
+  const payable = formatMoney(hasGst ? breakdown.total : total);
+
+  function toggle() {
+    if (!hasGst) return;
+    const next = !open;
+    setOpen(next);
+    onExpandedChange?.(next);
+  }
 
   return (
-    <div className="shop-sticky-bar">
-      <div className="shop-sticky-copy">
-        <div className="shop-sticky-total">
-          {cartCount} {cartCount === 1 ? t("shop.item") : t("shop.items")} • ₹{total}
+    <div className={`shop-sticky-bar ${open && hasGst ? "expanded" : ""}`}>
+      {open && hasGst ? (
+        <div className="shop-cart-breakdown">
+          <div>
+            <span>{t("shop.subtotal")}</span>
+            <strong>₹{formatMoney(breakdown.subtotal)}</strong>
+          </div>
+          <div>
+            <span>{t("shop.gst")}</span>
+            <strong>₹{formatMoney(breakdown.gst)}</strong>
+          </div>
+          <div className="shop-cart-breakdown-total">
+            <span>{t("shop.total")}</span>
+            <strong>₹{formatMoney(breakdown.total)}</strong>
+          </div>
         </div>
-        <div className="shop-sticky-sub">
-          <span className="dot" />
-          {t("shop.directChat")}
-        </div>
+      ) : null}
+
+      <div className="shop-sticky-row">
+        {hasGst ? (
+          <button type="button" className="shop-sticky-copy" onClick={toggle}>
+            <div className="shop-sticky-total">
+              {cartCount} {cartCount === 1 ? t("shop.item") : t("shop.items")} · ₹{payable}
+            </div>
+            <div className="shop-sticky-sub">
+              {open ? t("shop.hideBreakdown") : t("shop.tapBreakdown")}
+              {open ? <ChevronDown size={12} strokeWidth={2.4} /> : <ChevronUp size={12} strokeWidth={2.4} />}
+            </div>
+          </button>
+        ) : (
+          <div className="shop-sticky-copy">
+            <div className="shop-sticky-total">
+              {cartCount} {cartCount === 1 ? t("shop.item") : t("shop.items")} · ₹{payable}
+            </div>
+            <div className="shop-sticky-sub">
+              <span className="dot" />
+              {t("shop.directChat")}
+            </div>
+          </div>
+        )}
+        <button type="button" className="shop-wa-btn" onClick={onPlaceOrder} disabled={ordering}>
+          <WhatsAppIcon />
+          <span>{ordering ? "Opening..." : ctaLabel}</span>
+        </button>
       </div>
-      <button type="button" className="shop-wa-btn" onClick={onPlaceOrder} disabled={ordering}>
-        <WhatsAppIcon />
-        <span>{ordering ? "Opening..." : ctaLabel}</span>
-      </button>
     </div>
   );
 }

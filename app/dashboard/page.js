@@ -158,15 +158,31 @@ export default function DashboardHome() {
     const hoursPayload = hasAnyOpeningHours(form.opening_hours) ? form.opening_hours : null;
     const slug = `${slugify(form.name)}-${Math.floor(Math.random() * 900 + 100)}`;
 
-    const { data, error: saveError } = await supabase
+    const payload = buildBusinessPayload(form, hoursPayload);
+    let { data, error: saveError } = await supabase
       .from("businesses")
       .insert({
         owner_id: userData.user.id,
         slug,
-        ...buildBusinessPayload(form, hoursPayload),
+        ...payload,
       })
       .select()
       .single();
+
+    if (saveError && /require_customer_whatsapp/i.test(saveError.message)) {
+      const { require_customer_whatsapp, ...rest } = payload;
+      const retry = await supabase
+        .from("businesses")
+        .insert({
+          owner_id: userData.user.id,
+          slug,
+          ...rest,
+        })
+        .select()
+        .single();
+      data = retry.data;
+      saveError = retry.error;
+    }
 
     setSaving(false);
     if (saveError) {
@@ -185,12 +201,25 @@ export default function DashboardHome() {
     setSaving(true);
 
     const hoursPayload = hasAnyOpeningHours(form.opening_hours) ? form.opening_hours : null;
-    const { data, error: saveError } = await supabase
+    const payload = buildBusinessPayload(form, hoursPayload);
+    let { data, error: saveError } = await supabase
       .from("businesses")
-      .update(buildBusinessPayload(form, hoursPayload))
+      .update(payload)
       .eq("id", business.id)
       .select()
       .single();
+
+    if (saveError && /require_customer_whatsapp/i.test(saveError.message)) {
+      const { require_customer_whatsapp, ...rest } = payload;
+      const retry = await supabase
+        .from("businesses")
+        .update(rest)
+        .eq("id", business.id)
+        .select()
+        .single();
+      data = retry.data;
+      saveError = retry.error;
+    }
 
     setSaving(false);
     if (saveError) {

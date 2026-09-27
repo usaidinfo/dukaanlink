@@ -38,6 +38,10 @@
   flex-shrink: 0;
 }
 
+.order-toast-icon.warn {
+  background: #c2410c;
+}
+
 .order-toast-copy {
   flex: 1;
   min-width: 0;
@@ -60,6 +64,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.order-toast-copy span.wrap {
+  white-space: normal;
 }
 
 .order-toast-close {

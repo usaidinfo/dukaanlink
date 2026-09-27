@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AppSkeleton } from "../../../components/skeleton-screen";
 import { supabase } from "../../../lib/supabaseClient";
-import { Boxes, Camera, Check, Pencil, PlusCircle, Trash2, X, XCircle } from "lucide-react";
+import { Boxes, Camera, Check, Pencil, Plus, Trash2, X, XCircle } from "lucide-react";
 import { getBusinessCopy, getBusinessMode } from "../../../lib/business-config";
 import {
   formatItemQuantity,
@@ -12,8 +12,29 @@ import {
   usesItemQuantity,
 } from "../../../lib/quantity-units";
 import { useI18n } from "../../../components/i18n-provider";
-import QuantityField from "../../../components/dashboard/quantity-field";
+import GstOptionsField from "../../../components/dashboard/gst-options-field";
+import StockTrackingField from "../../../components/dashboard/stock-tracking-field";
+import {
+  VoiceMicButton,
+  VoiceStatus,
+  isLowParseConfidence,
+  parseVoiceItem,
+  useVoiceRecorder,
+} from "../../../components/dashboard/voice-item-input";
 import StockStepper from "../../../components/dashboard/stock-stepper";
+import ItemVariantsEditor from "../../../components/dashboard/item-variants-editor";
+import {
+  isPersistedVariantId,
+  itemHasVariants,
+  itemPriceRange,
+} from "../../../lib/item-variants";
+import { normalizeGst } from "../../../lib/gst";
+import {
+  crossedLowStockThreshold,
+  emitLowStockAlert,
+  isLowStock,
+  isStockTracking,
+} from "../../../lib/stock-alerts";
 import "./menu.css";
 
 const emptyItem = {
@@ -23,9 +44,15 @@ const emptyItem = {
   photo_url: "",
   quantity: "",
   quantity_unit: "piece",
+  gst_mode: "no_gst",
+  gst_rate: "",
+  stock_tracking_enabled: false,
+  alert_below: "",
 };
 
 function itemToForm(item) {
+  const gst = normalizeGst(item);
+  const tracking = isStockTracking(item);
   return {
     name: item.name || "",
     price: item.price == null ? "" : String(item.price),
@@ -33,6 +60,10 @@ function itemToForm(item) {
     photo_url: item.photo_url || "",
     quantity: item.quantity == null || item.quantity === "" ? "" : String(item.quantity),
     quantity_unit: item.quantity_unit || "piece",
+    gst_mode: gst.gst_mode,
+    gst_rate: gst.gst_rate == null ? "" : String(gst.gst_rate),
+    stock_tracking_enabled: tracking,
+    alert_below: item.alert_below == null || item.alert_below === "" ? "5" : String(item.alert_below),
   };
 }
 
@@ -51,6 +82,32 @@ export default function MenuPage() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [stockSavingId, setStockSavingId] = useState(null);
+  const [variantsEnabled, setVariantsEnabled] = useState(false);
+  const [variants, setVariants] = useState([]);
+  const [voiceTranscript, setVoiceTranscript] = useState("");
+  const [voiceError, setVoiceError] = useState("");
+  const [priceNeedsReview, setPriceNeedsReview] = useState(false);
+
+  const voice = useVoiceRecorder({
+    onTranscript: (text) => {
+      const heard = String(text || "").trim();
+      setVoiceTranscript(heard);
+      setVoiceError("");
+      const parsed = parseVoiceItem(heard);
+      openCreate({
+        name: parsed.name || "",
+        price: parsed.price == null ? "" : String(parsed.price),
+      });
+      setPriceNeedsReview(isLowParseConfidence(parsed));
+    },
+    onError: setVoiceError,
+  });
+
+  function resetVoice() {
+    setVoiceTranscript("");
+    setVoiceError("");
+    setPriceNeedsReview(false);
+  }
 
   useEffect(() => {
     init();
@@ -79,24 +136,42 @@ export default function MenuPage() {
   }
 
   async function loadItems(bizId) {
-    const { data } = await supabase
+    let { data, error } = await supabase
       .from("menu_items")
-      .select("*")
+      .select("*, item_variants(*)")
       .eq("business_id", bizId)
       .order("created_at", { ascending: false });
+
+    if (error) {
+      const retry = await supabase
+        .from("menu_items")
+        .select("*")
+        .eq("business_id", bizId)
+        .order("created_at", { ascending: false });
+      data = retry.data;
+    }
     setItems(data || []);
+  }
+
+  function resetVariants() {
+    setVariantsEnabled(false);
+    setVariants([]);
   }
 
   function closeSheet() {
     setSheetOpen(false);
     setEditingId(null);
     setForm(emptyItem);
+    resetVariants();
+    resetVoice();
     setError("");
   }
 
-  function openCreate() {
+  function openCreate(prefill = null) {
     setEditingId(null);
-    setForm(emptyItem);
+    setForm(prefill ? { ...emptyItem, ...prefill } : emptyItem);
+    resetVariants();
+    if (!prefill) resetVoice();
     setError("");
     setSheetOpen(true);
   }
@@ -104,6 +179,10 @@ export default function MenuPage() {
   function openEdit(item) {
     setEditingId(item.id);
     setForm(itemToForm(item));
+    const rows = item.item_variants || [];
+    setVariantsEnabled(rows.length > 0);
+    setVariants(rows);
+    resetVoice();
     setError("");
     setSheetOpen(true);
   }
@@ -131,42 +210,157 @@ export default function MenuPage() {
     setForm((prev) => ({ ...prev, photo_url: data.publicUrl }));
   }
 
+  async function syncVariants(menuItemId) {
+    const existing = await supabase
+      .from("item_variants")
+      .select("id")
+      .eq("menu_item_id", menuItemId);
+
+    if (existing.error) {
+      return existing.error;
+    }
+
+    const keepIds = new Set();
+    if (variantsEnabled) {
+      for (const [index, row] of variants.entries()) {
+        const payload = {
+          menu_item_id: menuItemId,
+          variant_type: row.variant_type,
+          label: row.label,
+          color_hex: row.variant_type === "color" ? row.color_hex || null : null,
+          price: Number(row.price),
+          in_stock: row.in_stock !== false,
+          sort_order: index,
+        };
+
+        if (isPersistedVariantId(row.id)) {
+          keepIds.add(row.id);
+          const { error } = await supabase.from("item_variants").update(payload).eq("id", row.id);
+          if (error) return error;
+        } else {
+          const { data, error } = await supabase.from("item_variants").insert(payload).select("id").single();
+          if (error) return error;
+          if (data?.id) keepIds.add(data.id);
+        }
+      }
+    }
+
+    const staleIds = (existing.data || []).map((row) => row.id).filter((id) => !keepIds.has(id));
+    if (staleIds.length) {
+      const { error } = await supabase.from("item_variants").delete().in("id", staleIds);
+      if (error) return error;
+    }
+    return null;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    if (!form.name || !form.price) {
+    const pricedVariants = variantsEnabled
+      ? variants.filter((row) => String(row.label || "").trim() && String(row.price).trim() !== "")
+      : [];
+
+    if (!form.name) {
       setError(t("menu.namePriceRequired"));
       return;
     }
+    if (variantsEnabled) {
+      if (!pricedVariants.length || pricedVariants.length !== variants.length) {
+        setError(t("menu.variantPriceRequired"));
+        return;
+      }
+    } else if (!form.price) {
+      setError(t("menu.namePriceRequired"));
+      return;
+    }
+
     setSaving(true);
 
-    const qty = parseQuantityInput(form.quantity);
+    const tracking = Boolean(form.stock_tracking_enabled);
+    const qty = tracking ? parseQuantityInput(form.quantity) ?? 0 : parseQuantityInput(form.quantity);
+    const gst = normalizeGst({
+      gst_mode: form.gst_mode,
+      gst_rate: form.gst_rate,
+    });
+    const fallbackPrice = variantsEnabled
+      ? Number(pricedVariants[0].price)
+      : parseFloat(form.price);
     const fields = {
       name: form.name,
-      price: parseFloat(form.price),
+      price: fallbackPrice,
       description: form.description || null,
       photo_url: form.photo_url || null,
       quantity: qty,
-      quantity_unit: qty == null ? null : form.quantity_unit || "piece",
+      quantity_unit: qty == null && !tracking ? null : form.quantity_unit || "piece",
+      gst_mode: gst.gst_mode,
+      gst_rate: gst.gst_mode === "no_gst" ? null : gst.gst_rate,
+      stock_tracking_enabled: tracking,
+      alert_below: tracking ? parseQuantityInput(form.alert_below) ?? 5 : null,
     };
+    if (!tracking && qty == null) {
+      fields.quantity = null;
+      fields.quantity_unit = null;
+    }
 
-    const { error: saveError } = editingId
-      ? await supabase.from("menu_items").update(fields).eq("id", editingId)
-      : await supabase.from("menu_items").insert({
-          ...fields,
-          business_id: businessId,
-          in_stock: true,
-        });
+    const persist = (payload) =>
+      editingId
+        ? supabase.from("menu_items").update(payload).eq("id", editingId).select("id").single()
+        : supabase
+            .from("menu_items")
+            .insert({
+              ...payload,
+              business_id: businessId,
+              in_stock: true,
+            })
+            .select("id")
+            .single();
 
-    setSaving(false);
-    if (saveError) {
+    let saved = await persist(fields);
+    if (saved.error && /gst_|stock_tracking|alert_below/i.test(saved.error.message)) {
+      if (gst.gst_mode !== "no_gst" || tracking) {
+        setSaving(false);
+        setError(t("menu.schemaMissing"));
+        return;
+      }
+      const {
+        gst_mode: _gstMode,
+        gst_rate: _gstRate,
+        stock_tracking_enabled: _tracking,
+        alert_below: _alert,
+        ...legacy
+      } = fields;
+      saved = await persist(legacy);
+    }
+
+    if (saved.error) {
+      setSaving(false);
       setError(
-        /quantity|description|column/i.test(saveError.message)
+        /quantity|gst_|stock_tracking|alert_below|description|column/i.test(saved.error.message)
           ? t("menu.schemaMissing")
-          : saveError.message
+          : saved.error.message
       );
       return;
     }
+
+    if (editingId) {
+      const prev = items.find((row) => row.id === editingId);
+      const nextItem = { ...(prev || {}), ...fields, name: fields.name };
+      if (crossedLowStockThreshold(prev, nextItem)) {
+        emitLowStockAlert(nextItem);
+      }
+    }
+
+    const variantError = await syncVariants(saved.data.id);
+    setSaving(false);
+    if (variantError) {
+      setError(
+        /item_variants|relation/i.test(variantError.message)
+          ? t("menu.schemaMissingVariants")
+          : variantError.message
+      );
+      return;
+    }
+
     closeSheet();
     loadItems(businessId);
   }
@@ -183,41 +377,17 @@ export default function MenuPage() {
     const next = Math.max(0, Math.round((current + delta) * 100) / 100);
 
     setStockSavingId(item.id);
-    setItems((prev) =>
-      prev.map((row) =>
-        row.id === item.id ? { ...row, quantity: next, quantity_unit: unit } : row
-      )
-    );
+    const nextItem = { ...item, quantity: next, quantity_unit: unit };
+    setItems((prev) => prev.map((row) => (row.id === item.id ? nextItem : row)));
+    if (crossedLowStockThreshold(item, nextItem)) {
+      emitLowStockAlert(nextItem);
+    }
 
     const { error: updateError } = await supabase
       .from("menu_items")
       .update({ quantity: next, quantity_unit: unit })
       .eq("id", item.id);
 
-    setStockSavingId(null);
-    if (updateError) {
-      setError(
-        /quantity|column/i.test(updateError.message)
-          ? t("menu.schemaMissing")
-          : updateError.message
-      );
-      loadItems(businessId);
-    }
-  }
-
-  async function startTracking(item) {
-    if (stockSavingId) return;
-    setStockSavingId(item.id);
-    const unit = "piece";
-    setItems((prev) =>
-      prev.map((row) =>
-        row.id === item.id ? { ...row, quantity: 1, quantity_unit: unit } : row
-      )
-    );
-    const { error: updateError } = await supabase
-      .from("menu_items")
-      .update({ quantity: 1, quantity_unit: unit })
-      .eq("id", item.id);
     setStockSavingId(null);
     if (updateError) {
       setError(
@@ -248,6 +418,7 @@ export default function MenuPage() {
   const businessCopy = getBusinessCopy(businessCategory, locale);
   const mode = getBusinessMode(businessCategory);
   const showQuantity = usesItemQuantity(mode);
+  const hasTrackedStock = items.some((item) => isStockTracking(item));
   const isEditing = Boolean(editingId);
 
   if (loading) return <AppSkeleton variant="menu" />;
@@ -275,7 +446,7 @@ export default function MenuPage() {
         </span>
       </div>
 
-      {showQuantity && items.length > 0 && (
+      {showQuantity && hasTrackedStock && (
         <div className="stock-tip">
           <strong>{t("menu.stockTipTitle")}</strong>
           <span>{t("menu.stockTipText")}</span>
@@ -301,34 +472,28 @@ export default function MenuPage() {
           )}
           <div className="menu-copy">
             <h3 style={{ textDecoration: item.in_stock ? "none" : "line-through" }}>{item.name}</h3>
-            <div className="menu-price">₹{item.price}</div>
-            {showQuantity && item.quantity != null ? (
+            <div className="menu-price">
+              {itemHasVariants(item)
+                ? t("menu.variantsFrom").replace("{price}", String(itemPriceRange(item).min))
+                : `₹${item.price}`}
+            </div>
+            {showQuantity && isStockTracking(item) ? (
               <div className="menu-stock-line">{formatItemQuantity(item)}</div>
             ) : null}
+            {isLowStock(item) ? <span className="menu-low-stock">{t("menu.lowStock")}</span> : null}
             <div className={`menu-status ${item.in_stock ? "ok" : "bad"}`}>
               <span className={`menu-dot ${item.in_stock ? "ok" : "bad"}`} />
               {item.in_stock ? businessCopy.availabilityOn : businessCopy.availabilityOff}
             </div>
-            {showQuantity && (
+            {showQuantity && isStockTracking(item) ? (
               <div className="menu-stock-controls">
-                {item.quantity == null ? (
-                  <button
-                    type="button"
-                    className="tiny-link"
-                    disabled={stockSavingId === item.id}
-                    onClick={() => startTracking(item)}
-                  >
-                    {t("menu.trackStock")}
-                  </button>
-                ) : (
-                  <StockStepper
-                    item={item}
-                    saving={stockSavingId === item.id}
-                    onBump={bumpStock}
-                  />
-                )}
+                <StockStepper
+                  item={item}
+                  saving={stockSavingId === item.id}
+                  onBump={bumpStock}
+                />
               </div>
-            )}
+            ) : null}
           </div>
           <div className="availability menu-card-actions">
             <button
@@ -352,10 +517,29 @@ export default function MenuPage() {
         </div>
       ))}
 
-      <button type="button" className="primary-cta" onClick={openCreate}>
-        <PlusCircle size={20} strokeWidth={2.1} />
-        {businessCopy.addItem}
-      </button>
+      {!sheetOpen ? (
+        <>
+          <VoiceStatus
+            phase={voice.phase}
+            error={voiceError}
+            transcript={voiceTranscript}
+            liveText={voice.liveText}
+          />
+          <VoiceMicButton
+            listening={voice.listening}
+            busy={voice.busy}
+            onClick={voice.toggle}
+          />
+          <button
+            type="button"
+            className="menu-fab"
+            onClick={() => openCreate()}
+            aria-label={businessCopy.addItem}
+          >
+            <Plus size={26} strokeWidth={2.5} />
+          </button>
+        </>
+      ) : null}
 
       {sheetOpen && (
         <div className="sheet-backdrop" onClick={closeSheet}>
@@ -404,6 +588,11 @@ export default function MenuPage() {
                   </div>
                 </div>
               </div>
+              {voiceTranscript && !isEditing ? (
+                <p className="voice-heard-line">
+                  {t("menu.voiceHeard")}: {voiceTranscript}
+                </p>
+              ) : null}
               <div className="field-row">
                 <label>{businessCopy.itemNameLabel}</label>
                 <input
@@ -413,27 +602,29 @@ export default function MenuPage() {
                   required
                 />
               </div>
-              <div className="field-row">
-                <label>{t("menu.price")}</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  placeholder="0"
-                  required
-                />
-              </div>
-              {showQuantity && (
-                <QuantityField
-                  quantity={form.quantity}
-                  unit={form.quantity_unit}
-                  onChange={({ quantity, unit }) =>
-                    setForm((prev) => ({ ...prev, quantity, quantity_unit: unit }))
-                  }
-                />
-              )}
+              {!variantsEnabled ? (
+                <div className="field-row">
+                  <label>{t("menu.price")}</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={form.price}
+                    onChange={(e) => {
+                      setForm({ ...form, price: e.target.value });
+                      setPriceNeedsReview(false);
+                    }}
+                    placeholder="0"
+                    required
+                    className={priceNeedsReview ? "price-needs-review" : undefined}
+                  />
+                  {priceNeedsReview ? (
+                    <p className="muted" style={{ fontSize: "0.76rem", marginTop: "0.35rem", color: "#b45309" }}>
+                      {t("menu.voiceCheckPrice")}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
               <div className="field-row">
                 <label>{t("menu.shortNote")}</label>
                 <input
@@ -442,6 +633,29 @@ export default function MenuPage() {
                   placeholder={businessCopy.shortNotePlaceholder}
                 />
               </div>
+              <ItemVariantsEditor
+                key={editingId || "new"}
+                enabled={variantsEnabled}
+                onEnabledChange={setVariantsEnabled}
+                variants={variants}
+                onChange={setVariants}
+              />
+              <GstOptionsField
+                gstMode={form.gst_mode}
+                gstRate={form.gst_rate}
+                onChange={({ gst_mode, gst_rate }) =>
+                  setForm((prev) => ({ ...prev, gst_mode, gst_rate }))
+                }
+              />
+              {showQuantity && (
+                <StockTrackingField
+                  enabled={form.stock_tracking_enabled}
+                  quantity={form.quantity}
+                  unit={form.quantity_unit}
+                  alertBelow={form.alert_below}
+                  onChange={(next) => setForm((prev) => ({ ...prev, ...next }))}
+                />
+              )}
               {error && <p className="error-text">{error}</p>}
               <div className="form-actions-equal">
                 <button type="button" className="ghost-cta" onClick={closeSheet}>

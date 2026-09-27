@@ -24,6 +24,7 @@ create table if not exists businesses (
   upi_id text,
   payment_mode text default 'both',
   closed_today_date date,
+  require_customer_whatsapp boolean default false,
   created_at timestamptz default now()
 );
 
@@ -39,6 +40,7 @@ alter table businesses add column if not exists payment_qr_url text;
 alter table businesses add column if not exists upi_id text;
 alter table businesses add column if not exists payment_mode text default 'both';
 alter table businesses add column if not exists closed_today_date date;
+alter table businesses add column if not exists require_customer_whatsapp boolean default false;
 
 -- 2. Menu / catalog items
 create table if not exists menu_items (
@@ -53,6 +55,10 @@ create table if not exists menu_items (
   sort_order int default 0,
   quantity numeric(12,2),
   quantity_unit text,
+  gst_mode text default 'no_gst', -- included | excluded | no_gst
+  gst_rate numeric(5,2),
+  stock_tracking_enabled boolean default false,
+  alert_below numeric(12,2),
   created_at timestamptz default now()
 );
 
@@ -60,6 +66,15 @@ alter table menu_items add column if not exists description text;
 alter table menu_items add column if not exists sort_order int default 0;
 alter table menu_items add column if not exists quantity numeric(12,2);
 alter table menu_items add column if not exists quantity_unit text;
+alter table menu_items add column if not exists gst_mode text default 'no_gst';
+alter table menu_items add column if not exists gst_rate numeric(5,2);
+alter table menu_items add column if not exists stock_tracking_enabled boolean default false;
+alter table menu_items add column if not exists alert_below numeric(12,2);
+
+-- Keep existing quantity-tracked items on after this column is added
+update menu_items
+  set stock_tracking_enabled = true
+  where quantity is not null and coalesce(stock_tracking_enabled, false) = false;
 
 -- 3. Orders (logged for the owner's dashboard; the actual order is sent via WhatsApp)
 create table if not exists orders (
@@ -89,6 +104,20 @@ create table if not exists flagged_customers (
 
 create index if not exists flagged_customers_business_id_idx on flagged_customers (business_id);
 
+-- 5. Item variants (optional size / color / weight / pack options)
+create table if not exists item_variants (
+  id uuid primary key default uuid_generate_v4(),
+  menu_item_id uuid references menu_items(id) on delete cascade not null,
+  variant_type text not null, -- size | color | weight | pack_size | custom
+  label text not null,
+  color_hex text,
+  price numeric(10,2) not null,
+  in_stock boolean default true,
+  sort_order int default 0
+);
+
+create index if not exists item_variants_menu_item_id_idx on item_variants (menu_item_id);
+
 -- Indexes for public shop + SEO listing
 create index if not exists businesses_slug_idx on businesses (slug);
 create index if not exists menu_items_business_id_idx on menu_items (business_id);
@@ -104,11 +133,20 @@ exception
     null;
 end $$;
 
+do $$
+begin
+  alter publication supabase_realtime add table menu_items;
+exception
+  when others then
+    null;
+end $$;
+
 -- Row Level Security
 alter table businesses enable row level security;
 alter table menu_items enable row level security;
 alter table orders enable row level security;
 alter table flagged_customers enable row level security;
+alter table item_variants enable row level security;
 
 -- Policies: drop + recreate so re-running this file is safe
 drop policy if exists "Owners manage own business" on businesses;
@@ -119,6 +157,8 @@ drop policy if exists "Public can create orders" on orders;
 drop policy if exists "Owners manage own orders" on orders;
 drop policy if exists "Owners update own orders" on orders;
 drop policy if exists "Owners manage own flagged customers" on flagged_customers;
+drop policy if exists "Owners manage own item variants" on item_variants;
+drop policy if exists "Public can read item variants" on item_variants;
 
 create policy "Owners manage own business" on businesses
   for all using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
@@ -155,6 +195,22 @@ create policy "Owners manage own flagged customers" on flagged_customers
   ) with check (
     business_id in (select id from businesses where owner_id = auth.uid())
   );
+
+create policy "Owners manage own item variants" on item_variants
+  for all using (
+    menu_item_id in (
+      select id from menu_items
+      where business_id in (select id from businesses where owner_id = auth.uid())
+    )
+  ) with check (
+    menu_item_id in (
+      select id from menu_items
+      where business_id in (select id from businesses where owner_id = auth.uid())
+    )
+  );
+
+create policy "Public can read item variants" on item_variants
+  for select using (true);
 
 -- Storage bucket for menu photos / logos (public read)
 insert into storage.buckets (id, name, public)

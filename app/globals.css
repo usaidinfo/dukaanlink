@@ -1336,6 +1336,14 @@ textarea {
   padding-bottom: 5.8rem;
 }
 
+.shop-shell.has-cart-breakdown {
+  padding-bottom: 7rem;
+}
+
+.shop-shell.has-cart-open {
+  padding-bottom: 14rem;
+}
+
 .shop-topbar {
   position: sticky;
   top: 0;
@@ -2532,6 +2540,31 @@ textarea {
 
 .payment-mode-option span {
   line-height: 1.3;
+}
+
+.choice-chips {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.choice-chip {
+  flex: 1;
+  min-height: 40px;
+  padding: 0.45rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.choice-chip.selected {
+  border-color: rgba(0, 104, 93, 0.35);
+  background: #eef8f6;
+  color: var(--primary);
 }
 
 .hours-row {

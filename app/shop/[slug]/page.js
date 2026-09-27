@@ -14,11 +14,11 @@ async function getShop(slug) {
 
   let { data: items, error } = await supabase
     .from("menu_items")
-    .select("*")
+    .select("*, item_variants(*)")
     .eq("business_id", business.id)
     .order("category", { ascending: true });
 
-  // Newer schemas include sort_order; ignore if the column isn't migrated yet.
+  // Newer schemas include variants / sort_order; ignore if not migrated yet.
   if (error) {
     const retry = await supabase
       .from("menu_items")

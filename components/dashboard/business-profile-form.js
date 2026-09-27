@@ -73,6 +73,33 @@ export default function BusinessProfileForm({
       </div>
 
       <div className="field-row">
+        <label>{t("dashboard.askCustomerPhone")}</label>
+        <p className="muted" style={{ fontSize: "0.8rem", marginBottom: "0.55rem" }}>
+          {t("dashboard.askCustomerPhoneHint")}
+        </p>
+        <div className="choice-chips" role="radiogroup" aria-label={t("dashboard.askCustomerPhone")}>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={!form.require_customer_whatsapp}
+            className={`choice-chip ${!form.require_customer_whatsapp ? "selected" : ""}`}
+            onClick={() => setForm({ ...form, require_customer_whatsapp: false })}
+          >
+            {t("common.optional")}
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={Boolean(form.require_customer_whatsapp)}
+            className={`choice-chip ${form.require_customer_whatsapp ? "selected" : ""}`}
+            onClick={() => setForm({ ...form, require_customer_whatsapp: true })}
+          >
+            {t("common.required")}
+          </button>
+        </div>
+      </div>
+
+      <div className="field-row">
         <label>{t("dashboard.area")}</label>
         <input
           value={form.address}

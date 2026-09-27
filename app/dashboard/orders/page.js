@@ -29,6 +29,7 @@ import {
   requestBrowserNotifications,
   setOrderSoundEnabled,
 } from "../../../lib/order-alerts";
+import { deductStockForCompletedOrder } from "../../../lib/stock-alerts";
 import "./orders.css";
 
 export default function OrdersPage() {
@@ -131,6 +132,9 @@ export default function OrdersPage() {
   async function advanceStatus(order) {
     const next = getNextOrderStatus(order.status);
     if (!next) return;
+    if (next === "done") {
+      await deductStockForCompletedOrder(supabase, businessId || order.business_id, order.items);
+    }
     await supabase.from("orders").update({ status: next }).eq("id", order.id);
     setOrders((prev) =>
       prev.map((row) => (row.id === order.id ? { ...row, status: next } : row))
