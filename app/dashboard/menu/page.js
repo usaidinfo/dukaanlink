@@ -27,6 +27,7 @@ import {
   isPersistedVariantId,
   itemHasVariants,
   itemPriceRange,
+  variantLabels,
 } from "../../../lib/item-variants";
 import { normalizeGst } from "../../../lib/gst";
 import {
@@ -472,13 +473,18 @@ export default function MenuPage() {
           )}
           <div className="menu-copy">
             <h3 style={{ textDecoration: item.in_stock ? "none" : "line-through" }}>{item.name}</h3>
+            {itemHasVariants(item) && variantLabels(item) ? (
+              <div className="menu-variant-line">{variantLabels(item)}</div>
+            ) : null}
             <div className="menu-price">
               {itemHasVariants(item)
                 ? t("menu.variantsFrom").replace("{price}", String(itemPriceRange(item).min))
                 : `₹${item.price}`}
             </div>
-            {showQuantity && isStockTracking(item) ? (
-              <div className="menu-stock-line">{formatItemQuantity(item)}</div>
+            {showQuantity && isStockTracking(item) && formatItemQuantity(item) ? (
+              <div className="menu-stock-line">
+                {t("menu.availableStock").replace("{qty}", formatItemQuantity(item))}
+              </div>
             ) : null}
             {isLowStock(item) ? <span className="menu-low-stock">{t("menu.lowStock")}</span> : null}
             <div className={`menu-status ${item.in_stock ? "ok" : "bad"}`}>

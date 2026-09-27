@@ -16,7 +16,7 @@ import { isStockTracking } from "../../lib/stock-alerts";
 import { useI18n } from "../i18n-provider";
 import "./shop-catalog.css";
 
-function ShopPrice({ item, price, soldOut = false }) {
+function ShopPrice({ item, price, soldOut = false, packLabel = "" }) {
   const { t } = useI18n();
   const gst = normalizeGst(item);
   return (
@@ -24,10 +24,27 @@ function ShopPrice({ item, price, soldOut = false }) {
       {gst.gst_mode === "excluded" && gst.gst_rate != null ? (
         <span className="shop-gst-extra">{t("shop.gstExclNote").replace("{rate}", String(gst.gst_rate))}</span>
       ) : null}
-      <strong className={soldOut ? "struck" : ""}>₹{price}</strong>
+      <div className="shop-price-row">
+        <strong className={soldOut ? "struck" : ""}>₹{price}</strong>
+        {packLabel ? (
+          <span className="shop-price-pack">{t("shop.priceForPack").replace("{pack}", packLabel)}</span>
+        ) : null}
+      </div>
       {gst.gst_mode === "included" && gst.gst_rate != null ? (
         <span className="shop-gst-note">{t("shop.gstInclNote").replace("{rate}", String(gst.gst_rate))}</span>
       ) : null}
+    </div>
+  );
+}
+
+function ShopStock({ item, soldOut = false }) {
+  const { t } = useI18n();
+  if (!isStockTracking(item)) return null;
+  const qty = formatItemQuantity(item);
+  if (!qty) return null;
+  return (
+    <div className={`shop-stock-line ${soldOut ? "muted" : ""}`}>
+      {t("shop.availableStock").replace("{qty}", qty)}
     </div>
   );
 }
@@ -122,8 +139,8 @@ function ShopItemCard({ item, businessCopy, cart, setQty, soldOut, onOpenOptions
   const hasVariants = itemHasVariants(item);
   const selected = defaultInStockVariant(variants);
   const qty = cart[cartLineKey(item.id, hasVariants ? selected?.id : null)] || 0;
-  const stockLabel = isStockTracking(item) ? formatItemQuantity(item) : "";
   const price = hasVariants && selected ? Number(selected.price) : Number(item.price);
+  const packLabel = hasVariants ? selected?.label || "" : "";
   const optionCount = variants.length;
 
   return (
@@ -155,11 +172,9 @@ function ShopItemCard({ item, businessCopy, cart, setQty, soldOut, onOpenOptions
           )
         ) : null}
         <div className="shop-item-meta">
-          <ShopPrice item={item} price={price} soldOut={soldOut} />
-          {stockLabel ? (
-            <span className={`shop-stock-pill ${soldOut ? "muted" : ""}`}>{stockLabel}</span>
-          ) : null}
+          <ShopPrice item={item} price={price} soldOut={soldOut} packLabel={packLabel} />
         </div>
+        <ShopStock item={item} soldOut={soldOut} />
       </div>
 
       {soldOut ? (
@@ -182,8 +197,8 @@ function VariantSheet({ item, cart, setQty, onClose }) {
   const [selectedId, setSelectedId] = useState(() => defaultInStockVariant(variants)?.id || null);
   const selected = variants.find((row) => row.id === selectedId) || defaultInStockVariant(variants);
   const qty = cart[cartLineKey(item.id, selected?.id)] || 0;
-  const stockLabel = isStockTracking(item) ? formatItemQuantity(item) : "";
   const price = selected ? Number(selected.price) : Number(item.price);
+  const packLabel = selected?.label || "";
 
   return (
     <div className="sheet-backdrop shop-variant-backdrop" onClick={onClose} role="presentation">
@@ -209,9 +224,9 @@ function VariantSheet({ item, cart, setQty, onClose }) {
             <h4 id="shop-variant-title">{item.name}</h4>
             {item.description ? <p>{item.description}</p> : null}
             <div className="shop-item-meta">
-              <ShopPrice item={item} price={price} />
-              {stockLabel ? <span className="shop-stock-pill">{stockLabel}</span> : null}
+              <ShopPrice item={item} price={price} packLabel={packLabel} />
             </div>
+            <ShopStock item={item} />
           </div>
           <button type="button" className="icon-button" onClick={onClose} aria-label={t("common.cancel")}>
             <X size={20} strokeWidth={2.2} />
@@ -228,7 +243,7 @@ function VariantSheet({ item, cart, setQty, onClose }) {
         <div className="shop-variant-sheet-foot">
           <div>
             <div className="eyebrow">{selected?.label || t("shop.chooseOption")}</div>
-            <ShopPrice item={item} price={price} />
+            <ShopPrice item={item} price={price} packLabel={packLabel} />
           </div>
           <AddOrStepper
             item={item}

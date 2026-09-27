@@ -174,8 +174,38 @@
   gap: 0.08rem;
 }
 
+.shop-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.shop-item-copy .shop-price-row strong {
+  display: inline;
+  margin-top: 0;
+}
+
 .shop-item-price strong {
   font-size: inherit;
+}
+
+.shop-price-pack {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.shop-stock-line {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.3;
+}
+
+.shop-stock-line.muted {
+  color: #94a3b8;
 }
 
 .shop-gst-note {
