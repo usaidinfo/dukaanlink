@@ -1,0 +1,938 @@
+[
+  {
+    "id": "atta",
+    "name": "Atta",
+    "name_hi": "आटा",
+    "category": "Staples & Grains",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Atta%20flour.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Atta%20flour.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "ricechawal",
+    "name": "Rice (Chawal)",
+    "name_hi": "चावल",
+    "category": "Staples & Grains",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Khyma_and_Basmati_rice.jpg/330px-Khyma_and_Basmati_rice.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Khyma_and_Basmati_rice.jpg",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "basmatirice",
+    "name": "Basmati Rice",
+    "name_hi": "बासमती चावल",
+    "category": "Staples & Grains",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Khyma_and_Basmati_rice.jpg/330px-Khyma_and_Basmati_rice.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Basmati",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "maida",
+    "name": "Maida",
+    "name_hi": "मैदा",
+    "category": "Staples & Grains",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Maida%20flour.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Maida%20flour.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "sujirava",
+    "name": "Suji (Rava)",
+    "name_hi": "सूजी",
+    "category": "Staples & Grains",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sa_semolina_far.jpg/330px-Sa_semolina_far.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Semolina",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "besan",
+    "name": "Besan",
+    "name_hi": "बेसन",
+    "category": "Staples & Grains",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Basan%20flour.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Basan%20flour.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "poha",
+    "name": "Poha",
+    "name_hi": "पोहा",
+    "category": "Staples & Grains",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Poha.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Poha.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "sabudana",
+    "name": "Sabudana",
+    "name_hi": "साबूदाना",
+    "category": "Staples & Grains",
+    "image_url": "https://www.bbassets.com/media/uploads/p/s/30000220_7-bb-royal-sabudana-white-small.jpg",
+    "source_url": "https://www.bigbasket.com/ps/?q=bb%20royal%20sabudana",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "daliya",
+    "name": "Daliya",
+    "name_hi": "दलिया",
+    "category": "Staples & Grains",
+    "image_url": "https://instamart-media-assets.swiggy.com/swiggy/image/upload/fl_lossy%2Cf_auto%2Cq_auto/NI_CATALOG/IMAGES/ciw/2025/12/16/6a10bb18-c2b2-4d21-9779-ee6e4bdfb7dd_RV19L3IDH9_MN_16122025.png",
+    "source_url": "https://www.swiggy.com/instamart",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "vermicellisewai",
+    "name": "Vermicelli (Sewai)",
+    "name_hi": "सेवई",
+    "category": "Staples & Grains",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Vermicelli%20or%20Sewai.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Vermicelli%20or%20Sewai.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "toordal",
+    "name": "Toor Dal",
+    "name_hi": "तूर दाल",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pigeon%20Pea%20(Toor%20Dal)%20(49683602388).jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pigeon%20Pea%20(Toor%20Dal)%20(49683602388).jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "moongdal",
+    "name": "Moong Dal",
+    "name_hi": "मूंग दाल",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Moong%20dal.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Moong%20dal.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "chanadal",
+    "name": "Chana Dal",
+    "name_hi": "चना दाल",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chana%20Ko%20Dal.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Chana%20Ko%20Dal.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "uraddal",
+    "name": "Urad Dal",
+    "name_hi": "उड़द दाल",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Urad%20dal.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Urad%20dal.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "masoordal",
+    "name": "Masoor Dal",
+    "name_hi": "मसूर दाल",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/MyPlate_gov_Cultural_Food_(20241025-USDA-FNS-UNK-0065).jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:MyPlate_gov_Cultural_Food_(20241025-USDA-FNS-UNK-0065).jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "rajma",
+    "name": "Rajma",
+    "name_hi": "राजमा",
+    "category": "Dals & Pulses",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Red_Rajma_BNC.jpg/330px-Red_Rajma_BNC.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Kidney_bean",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "kabulichanachhole",
+    "name": "Kabuli Chana (Chhole)",
+    "name_hi": "काबुली चना",
+    "category": "Dals & Pulses",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Chickpea_BNC.jpg/330px-Chickpea_BNC.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Chickpea",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "kalachana",
+    "name": "Kala Chana",
+    "name_hi": "काला चना",
+    "category": "Dals & Pulses",
+    "image_url": "https://images.bombaybasket.co.uk/public/uploads/all/7GB21WcYRpMSLOECgE8MX3w8igpUHVwcraLJdO8e.jpg",
+    "source_url": "https://bombaybasket.co.uk/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "driedmatar",
+    "name": "Dried Matar",
+    "name_hi": "सूखा मटर",
+    "category": "Dals & Pulses",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dried%20peas.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dried%20peas.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "refinedoil",
+    "name": "Refined Oil",
+    "name_hi": "रिफाइंड तेल",
+    "category": "Oils & Ghee",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bottle%201%20liter%20Sunflower%20refined%20oil.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bottle%201%20liter%20Sunflower%20refined%20oil.jpg",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "mustardoilsarsonkatel",
+    "name": "Mustard Oil (Sarson ka Tel)",
+    "name_hi": "सरसों का तेल",
+    "category": "Oils & Ghee",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dune%20Aura%20Mustard%20oil%20bottle%20picture.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dune%20Aura%20Mustard%20oil%20bottle%20picture.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "soyabeanoil",
+    "name": "Soyabean Oil",
+    "name_hi": "सोयाबीन तेल",
+    "category": "Oils & Ghee",
+    "image_url": "https://www.quickcartapp.in/uploads/media/2025/8906007280044_1.png",
+    "source_url": "https://www.quickcartapp.in/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "groundnutoil",
+    "name": "Groundnut Oil",
+    "name_hi": "मूंगफली का तेल",
+    "category": "Oils & Ghee",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Groundnut%20oil.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Groundnut%20oil.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "coconutoil",
+    "name": "Coconut Oil",
+    "name_hi": "नारियल तेल",
+    "category": "Oils & Ghee",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Coconut_and_oil.jpg/330px-Coconut_and_oil.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Coconut_oil",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "desighee",
+    "name": "Desi Ghee",
+    "name_hi": "देसी घी",
+    "category": "Oils & Ghee",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ghee.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ghee.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "sugar",
+    "name": "Sugar",
+    "name_hi": "चीनी",
+    "category": "Sugar, Salt & Sweeteners",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Granulated%20White%20Sugar%20with%20Large%20Crystals%2C%20Bright%20Front%20Light.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Granulated%20White%20Sugar%20with%20Large%20Crystals%2C%20Bright%20Front%20Light.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "salt",
+    "name": "Salt",
+    "name_hi": "नमक",
+    "category": "Sugar, Salt & Sweeteners",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Table%20Salt.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Table%20Salt.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "jaggerygud",
+    "name": "Jaggery (Gud)",
+    "name_hi": "गुड़",
+    "category": "Sugar, Salt & Sweeteners",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Indian%20Jaggery.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Indian%20Jaggery.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "honey",
+    "name": "Honey",
+    "name_hi": "शहद",
+    "category": "Sugar, Salt & Sweeteners",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Runny_hunny.jpg/330px-Runny_hunny.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Honey",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "haldi",
+    "name": "Haldi",
+    "name_hi": "हल्दी",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Turmeric-powder.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Turmeric-powder.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "redchillipowder",
+    "name": "Red Chilli Powder",
+    "name_hi": "लाल मिर्च पाउडर",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Red%20chilli%20powder.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Red%20chilli%20powder.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "dhaniyapowder",
+    "name": "Dhaniya Powder",
+    "name_hi": "धनिया पाउडर",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Coriander%20Powder.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Coriander%20Powder.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "jeera",
+    "name": "Jeera",
+    "name_hi": "जीरा",
+    "category": "Spices",
+    "image_url": "https://www.mystore.in/s/62ea2c599d1398fa16dbae0a/g/68d2cf6243302d6e9929fbe2/jivottam-cumin-seeds250g-420x420.jpg",
+    "source_url": "https://www.mystore.in/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "rai",
+    "name": "Rai",
+    "name_hi": "राई",
+    "category": "Spices",
+    "image_url": "https://thedesifood.com/media/Catch%20Rai%20-%20Whole%2C%20100%20g-2.webp",
+    "source_url": "https://thedesifood.com/products/catch-rai-whole",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "garammasala",
+    "name": "Garam Masala",
+    "name_hi": "गरम मसाला",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Garam%20Masala.JPG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Garam%20Masala.JPG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "kalimirch",
+    "name": "Kali Mirch",
+    "name_hi": "काली मिर्च",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/BlackPeppercorns.JPG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:BlackPeppercorns.JPG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "elaichi",
+    "name": "Elaichi",
+    "name_hi": "इलायची",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cardamom%20(Elaichi)%20from%20India.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cardamom%20(Elaichi)%20from%20India.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "laung",
+    "name": "Laung",
+    "name_hi": "लौंग",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Clove_spices.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Clove_spices.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "dalchini",
+    "name": "Dalchini",
+    "name_hi": "दालचीनी",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Cinnamomum%20verum%20spices.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cinnamomum%20verum%20spices.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "tejpatta",
+    "name": "Tej Patta",
+    "name_hi": "तेज पत्ता",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Indian%20bay%20leaf%20-%20tejpatta%20-%20indisches%20Lorbeerblatt.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Indian%20bay%20leaf%20-%20tejpatta%20-%20indisches%20Lorbeerblatt.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "hing",
+    "name": "Hing",
+    "name_hi": "हींग",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Asafoetida.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Asafoetida.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "saunf",
+    "name": "Saunf",
+    "name_hi": "सौंफ",
+    "category": "Spices",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Fennel-seeds.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Fennel-seeds.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "milk",
+    "name": "Milk",
+    "name_hi": "दूध",
+    "category": "Dairy & Bakery",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Glass_of_Milk_%2833657535532%29.jpg/330px-Glass_of_Milk_%2833657535532%29.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Milk",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "curddahi",
+    "name": "Curd (Dahi)",
+    "name_hi": "दही",
+    "category": "Dairy & Bakery",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Joghurt.jpg/330px-Joghurt.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Yogurt",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "paneer",
+    "name": "Paneer",
+    "name_hi": "पनीर",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Homemade%20Paneer%20cottage%20cheese%20cut%20into%20cubes.JPG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Homemade%20Paneer%20cottage%20cheese%20cut%20into%20cubes.JPG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "butter",
+    "name": "Butter",
+    "name_hi": "मक्खन",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Butter%20block.JPG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Butter%20block.JPG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "eggs",
+    "name": "Eggs",
+    "name_hi": "अंडे",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Eggs%20Chicken.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Eggs%20Chicken.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "bread",
+    "name": "Bread",
+    "name_hi": "ब्रेड",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bread%20loaf.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bread%20loaf.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "pavbun",
+    "name": "Pav (Bun)",
+    "name_hi": "पाव",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pav%20Bun.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pav%20Bun.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "cheeseslices",
+    "name": "Cheese Slices",
+    "name_hi": "चीज़ स्लाइस",
+    "category": "Dairy & Bakery",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Processed%20cheese%20slices.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Processed%20cheese%20slices.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "teachaipatti",
+    "name": "Tea (Chai Patti)",
+    "name_hi": "चाय पत्ती",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://www.jiomart.com/images/product/original/rvrzh9przq/elaisha-fresh-tea-leaves-chai-patti-tea-granules-pure-and-natural-tea-pouch-250-g-product-images-orvrzh9przq-p604338248-0-202309040504.jpg?im=Resize%3D%281000%2C1000%29",
+    "source_url": "https://www.jiomart.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "instantcoffee",
+    "name": "Instant Coffee",
+    "name_hi": "इंस्टेंट कॉफी",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Instant%20coffee.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Instant%20coffee.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "healthdrinkpowder",
+    "name": "Health Drink Powder",
+    "name_hi": "हेल्थ ड्रिंक पाउडर",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://i.ebayimg.com/images/g/PCUAAOSwuPVlJL4q/s-l1200.png",
+    "source_url": "https://www.ebay.com/",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "colddrink",
+    "name": "Cold Drink",
+    "name_hi": "कोल्ड ड्रिंक",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://tiimg.tistatic.com/fp/1/007/830/the-thunder-thrill-and-adventure-natural-color-experience-thums-up-cold-drink-2-25l-060.jpg",
+    "source_url": "https://www.indiamart.com/",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "packagedwater",
+    "name": "Packaged Water",
+    "name_hi": "पैकेज्ड पानी",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Bottled%20water.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bottled%20water.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "fruitjuice",
+    "name": "Fruit Juice",
+    "name_hi": "फलों का रस",
+    "category": "Tea, Coffee & Drinks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Orangejuice.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Orangejuice.jpg",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "glucosebiscuits",
+    "name": "Glucose Biscuits",
+    "name_hi": "ग्लूकोज़ बिस्कुट",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://www.bbassets.com/media/uploads/p/s/102102_4-parle-gluco-biscuits-parle-g.jpg",
+    "source_url": "https://www.bigbasket.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "creambiscuits",
+    "name": "Cream Biscuits",
+    "name_hi": "क्रीम बिस्कुट",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Two%20cream%20biscuits.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Two%20cream%20biscuits.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "rusk",
+    "name": "Rusk",
+    "name_hi": "रस्क",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://cdn.citymapia.com/kochi/world-mart-supermarket/9308/portfolio.jpg?biz=2149",
+    "source_url": "https://www.citymapia.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "namkeenbhujia",
+    "name": "Namkeen/Bhujia",
+    "name_hi": "नमकीन/भुजिया",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://supplika.com/cdn/shop/products/Haldiram-s-Bhujia-d1y_2048x.jpg?v=1599771758",
+    "source_url": "https://supplika.com/",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "chips",
+    "name": "Chips",
+    "name_hi": "चिप्स",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Potato-Chips.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Potato-Chips.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "instantnoodles",
+    "name": "Instant Noodles",
+    "name_hi": "इंस्टेंट नूडल्स",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Instant%20Noodles%20from%20India.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Instant%20Noodles%20from%20India.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "papad",
+    "name": "Papad",
+    "name_hi": "पापड़",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Urad%20Indian%20Papad.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Urad%20Indian%20Papad.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "chocolate",
+    "name": "Chocolate",
+    "name_hi": "चॉकलेट",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Chocolate%20bar.png",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Chocolate%20bar.png",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "candytoffee",
+    "name": "Candy/Toffee",
+    "name_hi": "कैंडी/टॉफ़ी",
+    "category": "Biscuits & Snacks",
+    "image_url": "https://images-cdn.ubuy.co.in/682b1ab7f5203a09140d0e01-parle-toffee-kismi-294-g-pack.jpg",
+    "source_url": "https://www.ubuy.co.in/",
+    "verification_status": "verified_representative"
+  },
+  {
+    "id": "badam",
+    "name": "Badam",
+    "name_hi": "बादाम",
+    "category": "Dry Fruits",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Almonds%20badam.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Almonds%20badam.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "kaju",
+    "name": "Kaju",
+    "name_hi": "काजू",
+    "category": "Dry Fruits",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/CASHEW%20NUTS.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:CASHEW%20NUTS.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "kishmish",
+    "name": "Kishmish",
+    "name_hi": "किशमिश",
+    "category": "Dry Fruits",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Dried%20grapes.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dried%20grapes.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "moongfali",
+    "name": "Moongfali",
+    "name_hi": "मूंगफली",
+    "category": "Dry Fruits",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Groundnuts.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Groundnuts.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "khajoor",
+    "name": "Khajoor",
+    "name_hi": "खजूर",
+    "category": "Dry Fruits",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Date_fruit.jpg/960px-Date_fruit.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Date_fruit.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "onion",
+    "name": "Onion",
+    "name_hi": "प्याज़",
+    "category": "Fresh Vegetables",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Mixed_onions.jpg/330px-Mixed_onions.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Onion",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "potato",
+    "name": "Potato",
+    "name_hi": "आलू",
+    "category": "Fresh Vegetables",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Patates.jpg/330px-Patates.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Potato",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "tomato",
+    "name": "Tomato",
+    "name_hi": "टमाटर",
+    "category": "Fresh Vegetables",
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/330px-Tomato_je.jpg",
+    "source_url": "https://en.wikipedia.org/wiki/Tomato",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "greenchilli",
+    "name": "Green Chilli",
+    "name_hi": "हरी मिर्च",
+    "category": "Fresh Vegetables",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Green%20chillies.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Green%20chillies.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "ginger",
+    "name": "Ginger",
+    "name_hi": "अदरक",
+    "category": "Fresh Vegetables",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ginger%20root.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ginger%20root.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "garlic",
+    "name": "Garlic",
+    "name_hi": "लहसुन",
+    "category": "Fresh Vegetables",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Garlic%20bulbs%20and%20cloves.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Garlic%20bulbs%20and%20cloves.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "lemon",
+    "name": "Lemon",
+    "name_hi": "नींबू",
+    "category": "Fresh Vegetables",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lemon%20fruit.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Lemon%20fruit.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "corianderleaves",
+    "name": "Coriander Leaves",
+    "name_hi": "धनिया पत्ती",
+    "category": "Fresh Vegetables",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Coriander%20Leaves.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Coriander%20Leaves.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "pickleachar",
+    "name": "Pickle (Achar)",
+    "name_hi": "अचार",
+    "category": "Sauces & Pickles",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pickles%20of%20India.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pickles%20of%20India.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "tomatoketchup",
+    "name": "Tomato Ketchup",
+    "name_hi": "टमाटर केचप",
+    "category": "Sauces & Pickles",
+    "image_url": "https://jaimamart.com/storage/flash-sales/kissan-fresh-tomato-ketchup-1-kg-product-images-o490000799-p490000799-1-202203170349-1.jpg",
+    "source_url": "https://jaimamart.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "jam",
+    "name": "Jam",
+    "name_hi": "जैम",
+    "category": "Sauces & Pickles",
+    "image_url": "https://www.starquik.com/cdn/shop/files/SQ104916_FOP_c1eb3db1-d0dd-4731-a1c6-c67026fb2c2b.jpg?v=1776847111",
+    "source_url": "https://www.starquik.com/products/kissan-mixed-fruit-jam-700-gm-sc-sm78",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "peanutbutter",
+    "name": "Peanut Butter",
+    "name_hi": "पीनट बटर",
+    "category": "Sauces & Pickles",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/PeanutButter.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:PeanutButter.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "detergentpowder",
+    "name": "Detergent Powder",
+    "name_hi": "डिटर्जेंट पाउडर",
+    "category": "Household & Cleaning",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Detergent%20powder%20with%20laundry%20enzymes.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Detergent%20powder%20with%20laundry%20enzymes.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "detergentbar",
+    "name": "Detergent Bar",
+    "name_hi": "डिटर्जेंट बार",
+    "category": "Household & Cleaning",
+    "image_url": "https://www.jiomart.com/images/product/original/490003810/surf-excel-detergent-bar-250-g-product-images-o490003810-p490003810-0-202603261805.jpg",
+    "source_url": "https://www.jiomart.com/p/groceries/surf-excel-detergent-bar-250-g/490003810",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "dishwashbar",
+    "name": "Dishwash Bar",
+    "name_hi": "डिशवॉश बार",
+    "category": "Household & Cleaning",
+    "image_url": "https://image.cdn.shpy.in/453665/SKU-0767_0-1772368385862.png?format=webp",
+    "source_url": "https://bg-shop.store.shoopy.in/products/bay6-dishwash-bar-pack-of-2-200g2",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "dishwashliquid",
+    "name": "Dishwash Liquid",
+    "name_hi": "डिशवॉश लिक्विड",
+    "category": "Household & Cleaning",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Afwasmiddel.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Afwasmiddel.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "floorcleaner",
+    "name": "Floor Cleaner",
+    "name_hi": "फ्लोर क्लीनर",
+    "category": "Household & Cleaning",
+    "image_url": "https://static.wixstatic.com/media/e1e9e8_78b92c148d0b4f1fa760e4e7e34215ca~mv2.jpg/v1/fill/w_1000%2Ch_1000%2Cal_c%2Cq_85%2Cenc_avif%2Cquality_auto/e1e9e8_78b92c148d0b4f1fa760e4e7e34215ca~mv2.jpg",
+    "source_url": "https://www.wix.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "toiletcleaner",
+    "name": "Toilet Cleaner",
+    "name_hi": "टॉयलेट क्लीनर",
+    "category": "Household & Cleaning",
+    "image_url": "https://www.starquik.com/cdn/shop/files/SQ108324_FOP_bdcd260e-d2bf-467a-af4c-b373d842f4ec.jpg?v=1776848235",
+    "source_url": "https://www.starquik.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "phenyl",
+    "name": "Phenyl",
+    "name_hi": "फिनाइल",
+    "category": "Household & Cleaning",
+    "image_url": "https://static1.industrybuying.com/products/cleaning/cleaning-liquid-essentials/phenyl/CLE.PHE.525006425_1706778875458.webp",
+    "source_url": "https://www.industrybuying.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "agarbatti",
+    "name": "Agarbatti",
+    "name_hi": "अगरबत्ती",
+    "category": "Household & Cleaning",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Incense%20in%20India.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Incense%20in%20India.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "matchbox",
+    "name": "Matchbox",
+    "name_hi": "माचिस",
+    "category": "Household & Cleaning",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Indian%20Matchbox.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Indian%20Matchbox.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "camphorkapoor",
+    "name": "Camphor (Kapoor)",
+    "name_hi": "कपूर",
+    "category": "Household & Cleaning",
+    "image_url": "https://www.silkrute.co.nz/images/detailed/1903/411GCsQsaFS.jpg",
+    "source_url": "https://www.silkrute.co.nz/health-and-personal/diet-and-nutrition/supplement/product-132393/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "mosquitorepellent",
+    "name": "Mosquito Repellent",
+    "name_hi": "मच्छर भगाने की दवा",
+    "category": "Household & Cleaning",
+    "image_url": "https://cdn.grofers.com/cdn-cgi/image/f%3Dauto%2Cfit%3Dscale-down%2Cq%3D70%2Cmetadata%3Dnone%2Cw%3D1080/da/cms-assets/cms/product/rc-upload-1770714093407-265.png?bg_token=color.background.quaternary",
+    "source_url": "https://blinkit.com/",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "broomjhadu",
+    "name": "Broom (Jhadu)",
+    "name_hi": "झाड़ू",
+    "category": "Household & Cleaning",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Indian-Broom.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Indian-Broom.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "bathingsoap",
+    "name": "Bathing Soap",
+    "name_hi": "नहाने का साबुन",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Pile%20of%20Handmade%20White%20Soap%20Bars%20at%20a%20Market%2002.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pile%20of%20Handmade%20White%20Soap%20Bars%20at%20a%20Market%2002.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "shampoo",
+    "name": "Shampoo",
+    "name_hi": "शैम्पू",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Shampoo%20Bottle%20made%20of%20PLA-Blend%20Bio-Flex.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Shampoo%20Bottle%20made%20of%20PLA-Blend%20Bio-Flex.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "toothpaste",
+    "name": "Toothpaste",
+    "name_hi": "टूथपेस्ट",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Toothpaste%20tube.svg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Toothpaste%20tube.svg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "toothbrush",
+    "name": "Toothbrush",
+    "name_hi": "टूथब्रश",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Toothbrush.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Toothbrush.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "hairoil",
+    "name": "Hair Oil",
+    "name_hi": "हेयर ऑयल",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hair%20oils.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hair%20oils.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "talcumpowder",
+    "name": "Talcum Powder",
+    "name_hi": "टैल्कम पाउडर",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Talcum%20Powder.JPEG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Talcum%20Powder.JPEG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "facecream",
+    "name": "Face Cream",
+    "name_hi": "फेस क्रीम",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Woman%20applies%20skin%20cream%20at%20home%20closeup.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Woman%20applies%20skin%20cream%20at%20home%20closeup.jpg",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "razor",
+    "name": "Razor",
+    "name_hi": "रेज़र",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Disposable%20Razor.JPG",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Disposable%20Razor.JPG",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "sanitarypads",
+    "name": "Sanitary Pads",
+    "name_hi": "सैनिटरी पैड्स",
+    "category": "Personal Care",
+    "image_url": "https://asset.sastasundar.com/incom/images/product/Whisper-Ultra-Heavy-Flow-Protection-XL-Sanitary-Pads-1744721214-10157432-a.jpg",
+    "source_url": "https://sastasundar.com/order-otc/whisper-ultra-heavy-flow-protection-xl-sanitary-pads-pack-of-15-klcjgh",
+    "verification_status": "verified_exact"
+  },
+  {
+    "id": "handwash",
+    "name": "Hand Wash",
+    "name_hi": "हैंड वॉश",
+    "category": "Personal Care",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Hand%20Soap%20Liquid.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hand%20Soap%20Liquid.jpg",
+    "verification_status": "verified_exact"
+  }
+]

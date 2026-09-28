@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppSkeleton } from "../../../components/skeleton-screen";
 import { supabase } from "../../../lib/supabaseClient";
-import { Boxes, Camera, Check, Pencil, Plus, Trash2, X, XCircle } from "lucide-react";
+import { Boxes, Camera, Check, Pencil, Plus, Search, Trash2, X, XCircle } from "lucide-react";
 import { getBusinessCopy, getBusinessMode } from "../../../lib/business-config";
 import {
   formatItemQuantity,
@@ -36,6 +36,16 @@ import {
   isLowStock,
   isStockTracking,
 } from "../../../lib/stock-alerts";
+import StarterCatalog from "../../../components/dashboard/starter-catalog";
+import "../../../components/dashboard/starter-catalog.css";
+import {
+  isKiranaStarterShop,
+  remainingKiranaStarter,
+  getUsedStarterIds,
+  rememberUsedStarterIds,
+} from "../../../lib/starter-catalog-kirana";
+import LazyImage from "../../../components/lazy-image";
+import { useVisibleWindow } from "../../../lib/use-visible-window";
 import "./menu.css";
 
 const emptyItem = {
@@ -88,6 +98,10 @@ export default function MenuPage() {
   const [voiceTranscript, setVoiceTranscript] = useState("");
   const [voiceError, setVoiceError] = useState("");
   const [priceNeedsReview, setPriceNeedsReview] = useState(false);
+  const [starterOpen, setStarterOpen] = useState(false);
+  const [starterSaving, setStarterSaving] = useState(false);
+  const [usedStarterIds, setUsedStarterIds] = useState([]);
+  const [catalogQuery, setCatalogQuery] = useState("");
 
   const voice = useVoiceRecorder({
     onTranscript: (text) => {
@@ -113,6 +127,23 @@ export default function MenuPage() {
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    if (!businessId) return;
+    setUsedStarterIds(getUsedStarterIds(businessId));
+  }, [businessId]);
+
+  useEffect(() => {
+    if (loading || !businessId || !isKiranaStarterShop(businessCategory)) return;
+    if (items.length > 0) return;
+    if (!remainingKiranaStarter(items, usedStarterIds).length) return;
+    try {
+      if (sessionStorage.getItem(`starter-skip-${businessId}`)) return;
+    } catch {
+      /* ignore */
+    }
+    setStarterOpen(true);
+  }, [loading, businessId, businessCategory, items.length]);
 
   async function init() {
     const { data: userData } = await supabase.auth.getUser();
@@ -416,11 +447,85 @@ export default function MenuPage() {
     loadItems(businessId);
   }
 
+  function closeStarter(skipped = false) {
+    if (skipped && businessId) {
+      try {
+        sessionStorage.setItem(`starter-skip-${businessId}`, "1");
+      } catch {
+        /* ignore */
+      }
+    }
+    setStarterOpen(false);
+  }
+
+  async function saveStarterItems(rows) {
+    if (!businessId || !rows.length || starterSaving) return;
+    setStarterSaving(true);
+    setError("");
+    const payload = rows
+      .filter((row) => Number(row.price) > 0)
+      .map((row) => ({
+        business_id: businessId,
+        name: row.name,
+        price: Number(row.price),
+        photo_url: row.photo_url,
+        category: row.category,
+        in_stock: true,
+        sort_order: row.sort_order,
+      }));
+    if (!payload.length) {
+      setStarterSaving(false);
+      setError(t("menu.starterNeedPrice"));
+      return;
+    }
+    const { error: saveError } = await supabase.from("menu_items").insert(payload);
+    setStarterSaving(false);
+    if (saveError) {
+      setError(
+        /column|relation/i.test(saveError.message) ? t("menu.schemaMissing") : saveError.message
+      );
+      return;
+    }
+    setUsedStarterIds(
+      rememberUsedStarterIds(
+        businessId,
+        rows.filter((row) => Number(row.price) > 0).map((row) => row.starter_id)
+      )
+    );
+    setStarterOpen(false);
+    await loadItems(businessId);
+  }
+
   const businessCopy = getBusinessCopy(businessCategory, locale);
   const mode = getBusinessMode(businessCategory);
   const showQuantity = usesItemQuantity(mode);
   const hasTrackedStock = items.some((item) => isStockTracking(item));
   const isEditing = Boolean(editingId);
+  const showStarter = isKiranaStarterShop(businessCategory);
+  const starterRemaining = showStarter ? remainingKiranaStarter(items, usedStarterIds) : [];
+  const filteredItems = useMemo(() => {
+    const q = catalogQuery.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((item) => {
+      const name = String(item.name || "").toLowerCase();
+      const description = String(item.description || "").toLowerCase();
+      const category = String(item.category || "").toLowerCase();
+      const variants = (item.item_variants || [])
+        .map((row) => String(row.label || "").toLowerCase())
+        .join(" ");
+      return (
+        name.includes(q) ||
+        description.includes(q) ||
+        category.includes(q) ||
+        variants.includes(q)
+      );
+    });
+  }, [items, catalogQuery]);
+  const { visibleCount, remaining, hasMore, loadMore } = useVisibleWindow(
+    filteredItems.length,
+    catalogQuery
+  );
+  const visibleItems = filteredItems.slice(0, visibleCount);
 
   if (loading) return <AppSkeleton variant="menu" />;
 
@@ -442,9 +547,16 @@ export default function MenuPage() {
           <Boxes size={20} strokeWidth={2.1} color="var(--primary)" />
           <strong>{businessCopy.collectionHeader}</strong>
         </div>
-        <span className="count-pill">
-          {items.length} {t("menu.items")}
-        </span>
+        <div className="menu-strip-actions">
+          {starterRemaining.length > 0 ? (
+            <button type="button" className="starter-list-link" onClick={() => setStarterOpen(true)}>
+              {t("menu.starterFromList")}
+            </button>
+          ) : null}
+          <span className="count-pill">
+            {filteredItems.length} {t("menu.items")}
+          </span>
+        </div>
       </div>
 
       {showQuantity && hasTrackedStock && (
@@ -454,17 +566,59 @@ export default function MenuPage() {
         </div>
       )}
 
-      {error && !sheetOpen ? <p className="error-text">{error}</p> : null}
+      {error && !sheetOpen && !starterOpen ? <p className="error-text">{error}</p> : null}
+
+      {items.length > 0 ? (
+        <div className="shop-search menu-search">
+          <Search size={18} strokeWidth={2.1} />
+          <input
+            type="search"
+            value={catalogQuery}
+            onChange={(e) => setCatalogQuery(e.target.value)}
+            placeholder={t("menu.searchPlaceholder")}
+            aria-label={t("menu.searchPlaceholder")}
+          />
+          {catalogQuery ? (
+            <button
+              type="button"
+              className="shop-search-clear"
+              onClick={() => setCatalogQuery("")}
+              aria-label={t("common.cancel")}
+            >
+              <X size={16} strokeWidth={2.2} />
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       {items.length === 0 && (
-        <p className="empty-state">{businessCopy.listEmpty}</p>
+        showStarter && starterRemaining.length > 0 ? (
+          <div className="starter-empty-actions">
+            <p className="empty-state">{businessCopy.listEmpty}</p>
+            <button type="button" className="primary-cta" onClick={() => setStarterOpen(true)}>
+              {t("menu.starterEmptyCta")}
+            </button>
+            <button type="button" className="starter-skip" onClick={() => openCreate()}>
+              {t("menu.starterAddOwn")}
+            </button>
+          </div>
+        ) : (
+          <p className="empty-state">{businessCopy.listEmpty}</p>
+        )
       )}
 
-      {items.map((item) => (
+      {items.length > 0 && filteredItems.length === 0 ? (
+        <p className="empty-state">{t("menu.searchEmpty")}</p>
+      ) : null}
+
+      {visibleItems.map((item) => (
         <div className={`menu-card ${item.in_stock ? "" : "off"}`} key={item.id}>
           {item.photo_url ? (
             <div className="menu-thumb">
-              <img src={item.photo_url} alt="" style={item.in_stock ? undefined : { filter: "grayscale(1)" }} />
+              <LazyImage
+                src={item.photo_url}
+                style={item.in_stock ? undefined : { filter: "grayscale(1)" }}
+              />
             </div>
           ) : (
             <div className="menu-thumb" style={{ display: "grid", placeItems: "center", color: "var(--muted)" }}>
@@ -522,8 +676,13 @@ export default function MenuPage() {
           </div>
         </div>
       ))}
+      {hasMore ? (
+        <button type="button" className="list-load-more" onClick={loadMore}>
+          {t("common.loadMoreLeft").replace("{count}", String(remaining))}
+        </button>
+      ) : null}
 
-      {!sheetOpen ? (
+      {!sheetOpen && !starterOpen ? (
         <>
           <VoiceStatus
             phase={voice.phase}
@@ -723,6 +882,17 @@ export default function MenuPage() {
           </div>
         </div>
       )}
+
+      {starterOpen ? (
+        <StarterCatalog
+          existingItems={items}
+          usedIds={usedStarterIds}
+          saving={starterSaving}
+          error={error}
+          onClose={() => closeStarter(true)}
+          onSave={saveStarterItems}
+        />
+      ) : null}
     </div>
   );
 }

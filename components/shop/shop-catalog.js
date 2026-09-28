@@ -13,7 +13,9 @@ import {
 } from "../../lib/item-variants";
 import { normalizeGst } from "../../lib/gst";
 import { isStockTracking } from "../../lib/stock-alerts";
+import { useVisibleWindow } from "../../lib/use-visible-window";
 import { useI18n } from "../i18n-provider";
+import LazyImage from "../lazy-image";
 import "./shop-catalog.css";
 
 function ShopPrice({ item, price, soldOut = false, packLabel = "" }) {
@@ -147,7 +149,7 @@ function ShopItemCard({ item, businessCopy, cart, setQty, soldOut, onOpenOptions
     <article className={`shop-item-card ${soldOut ? "sold-out" : ""}`}>
       <div className={`shop-item-thumb ${soldOut ? "gray" : ""}`}>
         {item.photo_url ? (
-          <img src={item.photo_url} alt={item.name} loading="lazy" />
+          <LazyImage src={item.photo_url} alt={item.name} />
         ) : (
           <div className="shop-item-placeholder">
             <ShoppingBag size={26} strokeWidth={2} />
@@ -213,7 +215,7 @@ function VariantSheet({ item, cart, setQty, onClose }) {
         <div className="shop-variant-sheet-head">
           <div className="shop-item-thumb">
             {item.photo_url ? (
-              <img src={item.photo_url} alt="" />
+              <LazyImage src={item.photo_url} eager />
             ) : (
               <div className="shop-item-placeholder">
                 <ShoppingBag size={26} strokeWidth={2} />
@@ -271,6 +273,15 @@ export default function ShopCatalog({
 }) {
   const { t } = useI18n();
   const [optionsItem, setOptionsItem] = useState(null);
+  const rows = useMemo(
+    () => [
+      ...available.map((item) => ({ item, soldOut: false })),
+      ...unavailable.map((item) => ({ item, soldOut: true })),
+    ],
+    [available, unavailable]
+  );
+  const { visibleCount, remaining, hasMore, loadMore } = useVisibleWindow(rows.length, search);
+  const visibleRows = rows.slice(0, visibleCount);
 
   return (
     <section className="shop-catalog">
@@ -310,28 +321,22 @@ export default function ShopCatalog({
       )}
 
       <div className="shop-item-list">
-        {available.map((item) => (
+        {visibleRows.map(({ item, soldOut }) => (
           <ShopItemCard
             key={item.id}
             item={item}
             businessCopy={businessCopy}
             cart={cart}
             setQty={setQty}
+            soldOut={soldOut || undefined}
             onOpenOptions={setOptionsItem}
           />
         ))}
-
-        {unavailable.map((item) => (
-          <ShopItemCard
-            key={item.id}
-            item={item}
-            businessCopy={businessCopy}
-            cart={cart}
-            setQty={setQty}
-            soldOut
-            onOpenOptions={setOptionsItem}
-          />
-        ))}
+        {hasMore ? (
+          <button type="button" className="list-load-more" onClick={loadMore}>
+            {t("common.loadMoreLeft").replace("{count}", String(remaining))}
+          </button>
+        ) : null}
       </div>
 
       {optionsItem ? (

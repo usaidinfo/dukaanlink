@@ -16,6 +16,7 @@ import {
   normalizeOpeningHours,
 } from "../opening-hours-fields";
 import { useI18n } from "../i18n-provider";
+import LazyImage from "../lazy-image";
 
 export default function ShopHero({ business, businessCopy, coverSrc }) {
   const { t } = useI18n();
@@ -26,7 +27,7 @@ export default function ShopHero({ business, businessCopy, coverSrc }) {
   return (
     <section className="shop-hero">
       <div className="shop-cover">
-        {coverSrc ? <img src={coverSrc} alt="" /> : <div className="shop-cover-fallback" />}
+        {coverSrc ? <LazyImage src={coverSrc} eager /> : <div className="shop-cover-fallback" />}
         <div className="shop-cover-fade" />
         <div className="shop-verified-pill">
           <Verified size={13} strokeWidth={2.3} />
@@ -38,7 +39,7 @@ export default function ShopHero({ business, businessCopy, coverSrc }) {
         <div className="shop-identity-top">
           <div className="shop-avatar">
             {business.logo_url ? (
-              <img src={business.logo_url} alt="" />
+              <LazyImage src={business.logo_url} eager />
             ) : (
               <Store size={30} strokeWidth={2} />
             )}
